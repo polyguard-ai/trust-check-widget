@@ -1,0 +1,66 @@
+@import 'tailwindcss';
+
+@theme {
+  --color-primary: #407796;
+  --color-primary-strong: #2d5a6b;
+  --color-ink: #101823;
+  --color-muted: #4b5563;
+  --color-line: #e5e9f0;
+  --color-line-strong: #cdd5e1;
+  --color-surface: #f6f8fa;
+  --color-accent: #eed796;
+  --color-on-dark: #cdd5e1;
+  --color-del-bg: #fdecec;
+  --color-del-ink: #8a1c1c;
+  --color-add-bg: #e6f2ea;
+  --color-add-ink: #1d5b33;
+
+  --font-sans: var(--font-plex-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-roboto-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  html,
+  body {
+    background-color: #ffffff;
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  a {
+    color: var(--color-primary);
+  }
+  a:hover {
+    color: var(--color-primary-strong);
+  }
+  *:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+  }
+}
+
+@layer components {
+  .code-block pre.shiki {
+    margin: 0;
+    padding: 16px 18px;
+    border-radius: 8px;
+    background-color: var(--color-ink) !important;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    line-height: 1.55;
+    overflow-x: auto;
+  }
+  .code-block.code-sm pre.shiki {
+    font-size: 12px;
+  }
+}
