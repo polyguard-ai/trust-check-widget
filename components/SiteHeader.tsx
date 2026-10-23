@@ -14,10 +14,9 @@ export function SiteHeader() {
       <div className="mx-auto flex min-h-16 max-w-[1120px] flex-wrap items-center justify-between gap-x-4 gap-y-2 py-3">
         <Link
           href="/"
-          className="flex items-baseline gap-2 text-base font-bold text-ink no-underline hover:text-ink"
+          className="text-lg font-bold tracking-[-0.01em] text-primary no-underline hover:text-primary-strong"
         >
-          <span className="text-primary">Polyguard</span>
-          <span className="font-medium text-muted">Trust Check Widget</span>
+          postcaptcha
         </Link>
         <nav className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm" aria-label="Main">
           {NAV.map((item) => (

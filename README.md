@@ -1,9 +1,9 @@
-# Polyguard Trust Check Widget
+# postcaptcha
 
-Replace reCAPTCHA or Cloudflare Turnstile with a Polyguard Trust Check. The
-visitor confirms with their phone, PG-Presence confirms a real device is in
-front of the screen, and your server verifies the result with one POST. No
-site key, secret or account is needed to start.
+Postcaptcha replaces reCAPTCHA or Cloudflare Turnstile with a Polyguard Trust
+Check. The visitor confirms with their phone, PG-Presence confirms a real
+device is in front of the screen, and your server verifies the result with one
+POST. No site key, secret or account is needed to start.
 
 This repo is the source of [postcaptcha.com](https://postcaptcha.com): the
 landing page with a live demo form, migration guides, the claim page, and

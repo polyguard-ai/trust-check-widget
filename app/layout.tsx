@@ -21,8 +21,8 @@ const robotoMono = Roboto_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL('https://postcaptcha.com'),
   title: {
-    default: 'Replace your CAPTCHA with a Polyguard Trust Check',
-    template: '%s | Polyguard Trust Check',
+    default: 'postcaptcha: replace your CAPTCHA with a Polyguard Trust Check',
+    template: '%s | postcaptcha',
   },
   description:
     'The only modern way to be sure an agent did not fill in your form. A keyless, drop-in replacement for reCAPTCHA and Turnstile, verified on your server with one request.',
@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     description:
       'A keyless Polyguard Trust Check replaces reCAPTCHA or Turnstile. Free for 1,000 Trust Checks a week, no account required.',
     url: 'https://postcaptcha.com',
-    siteName: 'Polyguard Trust Check',
+    siteName: 'postcaptcha',
     type: 'website',
   },
 };
