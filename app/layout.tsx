@@ -1,19 +1,19 @@
 import type { Metadata, Viewport } from 'next';
-import { IBM_Plex_Sans, Roboto_Mono } from 'next/font/google';
+import localFont from 'next/font/local';
 import { SiteFooter } from '@/components/SiteFooter';
 import { SiteHeader } from '@/components/SiteHeader';
 import { ONLOAD_CALLBACK, explicitScriptUrl } from '@/lib/config';
 import './globals.css';
 
-const plexSans = IBM_Plex_Sans({
-  subsets: ['latin'],
-  weight: ['400', '500', '600', '700'],
+const plexSans = localFont({
+  src: './fonts/IBMPlexSans.woff2',
+  weight: '400 700',
   variable: '--font-plex-sans',
   display: 'swap',
 });
-const robotoMono = Roboto_Mono({
-  subsets: ['latin'],
-  weight: ['400', '500'],
+const robotoMono = localFont({
+  src: './fonts/RobotoMono.woff2',
+  weight: '400 500',
   variable: '--font-roboto-mono',
   display: 'swap',
 });
@@ -25,9 +25,9 @@ export const metadata: Metadata = {
     template: '%s | postcaptcha',
   },
   description:
-    'The only modern way to be sure an agent did not fill in your form. A keyless, drop-in replacement for reCAPTCHA and Turnstile, verified on your server with one request.',
+    'The only way to be sure an agent did not fill in your form. A keyless, drop-in replacement for reCAPTCHA and Turnstile, verified on your server with one request.',
   openGraph: {
-    title: "The only modern way to be sure an agent didn't fill in your form.",
+    title: "The only way to be sure an agent didn't fill in your form.",
     description:
       'A keyless Polyguard Trust Check replaces reCAPTCHA or Turnstile. Free for 1,000 Trust Checks a week, no account required.',
     url: 'https://postcaptcha.com',

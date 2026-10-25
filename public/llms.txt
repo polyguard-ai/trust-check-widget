@@ -1,0 +1,162 @@
+# postcaptcha: replace a CAPTCHA with a Polyguard Trust Check
+
+Instructions for a coding agent integrating the Polyguard Trust Check widget
+into a website form. The widget is a drop-in replacement for reCAPTCHA v2 and
+Cloudflare Turnstile. No site key, secret or account is needed to start.
+
+Source and examples: https://github.com/polyguard-ai/trust-check-widget
+Human-readable site: https://postcaptcha.com
+
+## What it does
+
+- The page loads one script and places one div inside the form.
+- The visitor clicks the box and scans a code with their phone. Polyguard
+  checks that a real phone captured the code from the screen (PG-Presence,
+  optical distance bounding) and that the phone passed hardware attestation.
+- On success the widget adds a hidden input named `pg-trust-check-response`
+  to the enclosing form and calls the `data-callback` function.
+- The server sends that value to `POST https://api.polyguard.ai/v2/siteverify`
+  and checks `success` and `hostname`.
+
+Facts to keep in mind:
+
+- Visitors need a phone. They do not need to install an app.
+- A response verifies once and expires 300 seconds after the Trust Check.
+  Re-render or reset the widget for a second submission.
+- The first Trust Check from a new hostname creates a free account for that
+  hostname, limited to 1,000 Trust Checks per ISO week. The site owner can
+  claim it later: https://postcaptcha.com/#claim
+- `localhost`, `127.0.0.1`, `[::1]` and `*.localhost` work, limited to 100
+  Trust Checks a day per IP address.
+- Every Trust Check is interactive. There is no invisible or score-only mode.
+
+## Step 1: the page
+
+Add the script once per page and the div inside the form:
+
+    <script src="https://cdn.polyguard.ai/sdk/latest/trust-check.js" async defer></script>
+
+    <form method="POST" action="/signup">
+      <input name="email" type="email" required>
+      <div class="pg-trust-check" data-callback="onVerified" data-action="signup"></div>
+      <button id="submit" type="submit" disabled>Create account</button>
+    </form>
+    <script>
+      function onVerified() { document.getElementById('submit').disabled = false; }
+    </script>
+
+Supported `data-*` attributes on the div:
+
+- `data-callback`, `data-expired-callback`, `data-error-callback`: names of
+  global functions. The error callback receives an error code string.
+- `data-action`: up to 32 chars, `[A-Za-z0-9_-]`, echoed by siteverify.
+- `data-cdata`: up to 255 chars, echoed by siteverify.
+- `data-theme`: `auto` (default), `light`, `dark`.
+- `data-size`: `normal` (300x65, default), `compact` (150x140), `flexible`
+  (full width, 65 tall).
+- `data-execution`: `render` (default) or `execute` (wait for
+  `Polyguard.TrustCheck.execute(id)`).
+- `data-locale`: `en`, `es`, `ar`, `hi`.
+- `data-path`: group pages with dynamic paths (for `/post/12345` set
+  `data-path="/post"`).
+- `data-scored`: `true` makes a failed presence score fail the check. Default
+  `false`.
+- `data-response-field-name`: override the hidden input's name.
+
+Existing reCAPTCHA or Turnstile markup also works: the script renders
+`.g-recaptcha` and `.cf-turnstile` containers (ignoring `data-sitekey`), keeps
+the hidden input named `g-recaptcha-response` or `cf-turnstile-response` for
+them, and defines `window.grecaptcha` and `window.turnstile` when the page has
+not. The minimum migration is the script URL and the server call.
+
+Explicit JavaScript API, mirroring Turnstile:
+
+    const id = Polyguard.TrustCheck.render('#container', { callback, action: 'signup' });
+    Polyguard.TrustCheck.getResponse(id);   // '' until verified
+    Polyguard.TrustCheck.reset(id);
+    Polyguard.TrustCheck.remove(id);
+    Polyguard.TrustCheck.isExpired(id);
+    Polyguard.TrustCheck.execute(id);
+    Polyguard.TrustCheck.ready(fn);
+
+Load with `trust-check.js?render=explicit&onload=fnName` to render yourself.
+
+## Step 2: the server
+
+    POST https://api.polyguard.ai/v2/siteverify
+    Content-Type: application/x-www-form-urlencoded   (JSON also accepted)
+
+    response=<pg-trust-check-response>&remoteip=<visitor ip>
+
+Response:
+
+    {
+      "success": true,
+      "challenge_ts": "2026-10-22T18:40:12Z",
+      "hostname": "www.example.com",
+      "app_id": "...",
+      "link_uuid": "...",
+      "link_session_id": "...",
+      "action": "signup",
+      "cdata": "",
+      "score": "PASS",
+      "remoteip_matched": true,
+      "error-codes": []
+    }
+
+Rules:
+
+- Require `success === true` AND `hostname` equal to the hostname your form is
+  served from. Without a secret, the hostname comparison is what ties the
+  result to your site.
+- If you set `data-action`, also compare `action`.
+- Use a request timeout (5 seconds is enough) and treat a non-JSON reply as
+  a failure.
+- `secret` is optional. After the hostname is claimed, the site owner can send
+  the App API key as `secret` and require it.
+- `remoteip` is optional. It is compared with the address that started the
+  Trust Check and reported as `remoteip_matched`; a mismatch does not change
+  `success`.
+- `error-codes` values: `missing-input-response`, `invalid-input-response`,
+  `timeout-or-duplicate`, `invalid-input-secret`, `bad-request`,
+  `internal-error`.
+- `score` values: `PASS`, `WARN`, `FAIL`, `INCOMPLETE`, `OFFLINE`,
+  `NOT_ENABLED`. With `data-scored` off (the default) it is informational.
+
+## Pick the example for the stack
+
+Copy the file that matches, then adapt the hostname constant and the
+form-handling code:
+
+- React: https://raw.githubusercontent.com/polyguard-ai/trust-check-widget/main/examples/react/usePolyguardTrustCheck.ts
+  and https://raw.githubusercontent.com/polyguard-ai/trust-check-widget/main/examples/react/TrustCheckForm.tsx
+- Next.js App Router route handler: https://raw.githubusercontent.com/polyguard-ai/trust-check-widget/main/examples/nextjs/route.ts
+- Express middleware: https://raw.githubusercontent.com/polyguard-ai/trust-check-widget/main/examples/express/middleware.js
+- Plain HTML: https://raw.githubusercontent.com/polyguard-ai/trust-check-widget/main/examples/html/index.html
+- Flask decorator: https://raw.githubusercontent.com/polyguard-ai/trust-check-widget/main/examples/python-flask/verify.py
+- PHP: https://raw.githubusercontent.com/polyguard-ai/trust-check-widget/main/examples/php/verify.php
+- WordPress notes: https://raw.githubusercontent.com/polyguard-ai/trust-check-widget/main/examples/wordpress/README.md
+
+Any other stack: do Step 1 in the template and Step 2 in the form handler with
+the language's HTTP client, following the rules above.
+
+## Migrating from reCAPTCHA v2 or Turnstile
+
+- Script URL: replace with `https://cdn.polyguard.ai/sdk/latest/trust-check.js`.
+- Server call: replace the siteverify URL with
+  `https://api.polyguard.ai/v2/siteverify`; drop `secret` or keep it empty.
+- Optional renames: `class="pg-trust-check"`, field `pg-trust-check-response`,
+  `Polyguard.TrustCheck.*` in place of `grecaptcha.*` / `turnstile.*`.
+- Not supported: `data-sitekey` (ignored), `data-appearance`, reCAPTCHA
+  invisible, Turnstile managed/non-interactive/invisible modes.
+
+Full tables: https://postcaptcha.com/#migrate
+
+## After integrating
+
+Tell the site owner:
+
+- The account for the hostname is free and limited to 1,000 Trust Checks per
+  week. To manage it, claim the hostname by publishing
+  `/.well-known/polyguard.json`: https://postcaptcha.com/#claim
+- Visitors need a phone.

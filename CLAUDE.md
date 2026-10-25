@@ -15,10 +15,11 @@ pnpm. Spec: `_SPECS/trust-check-widget.md` in the Polyguard workspace
 - `app/layout.tsx` loads `NEXT_PUBLIC_TRUST_CHECK_SCRIPT_URL` once, with
   `?render=explicit&onload=__pgTrustCheckOnload`. An inline script before it
   defines that callback, which flushes `window.__pgTrustCheckQueue`.
-- `components/TrustCheckForm.tsx` queues its `Polyguard.TrustCheck.render()`
-  call on that queue, so it works whether the script loads before or after
-  hydration. Send stays disabled until the widget's `callback` fires; the
-  widget is reset after each submit because a response verifies once.
+- `components/HeroTrustCheck.tsx` queues its `Polyguard.TrustCheck.render()`
+  call on that queue (`lib/trust-check-loader.ts`), so it works whether the
+  script loads before or after hydration. When the callback fires it posts
+  the response to `/api/submit` and shows the JSON; "Run another check"
+  resets the widget because a response verifies once.
 - Explicit mode is deliberate: implicit rendering would race React for the
   `.pg-trust-check` element.
 - The widget source is `polyguard-sdk/src/trustCheckWidget.js` in
@@ -34,10 +35,14 @@ pnpm. Spec: `_SPECS/trust-check-widget.md` in the Polyguard workspace
 stored. Until the backend's siteverify is deployed it returns 502
 `siteverify_http_error` with status 404.
 
-## Examples feed the landing page
+## One page
 
-`lib/examples.ts` reads files under `examples/` at build time for the code
-tabs. Renaming an example file means updating `EXAMPLES`. The TypeScript
+Everything is on `app/page.tsx` under anchored sections (`#how`,
+`#examples`, `#migrate`, `#claim`, plus `#demo` on the hero card); the header
+links are anchors. `/demo`, `/claim` and `/migrate/*` redirect there in
+`next.config.mjs`. `public/llms.txt` is the agent-facing copy of the
+integration instructions and is linked from `AGENT_PROMPT` in
+`lib/config.ts`; keep the two in step with `examples/`. The TypeScript
 examples are typechecked and linted with the site.
 
 ## Commands

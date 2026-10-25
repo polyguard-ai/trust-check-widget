@@ -61,6 +61,14 @@ const FORBIDDEN: Rule[] = [
   },
 ];
 
+// Filler words that carry no fact. Kept separate from FORBIDDEN so the list is easy to extend.
+const SLOP: Rule = {
+  pattern:
+    /\b(?:delv(?:e|es|ed|ing)|testaments?|beacons?|tapestr(?:y|ies)|revolutioni[sz](?:e|es|ed|ing)|game[- ]chang(?:er|ers|ing)|foster(?:s|ed|ing)?|underscor(?:e|es|ed|ing)|pivotal|vibrant(?:ly)?|holistic(?:ally)?|not only|ever[- ]evolving)\b/gi,
+  message: 'Filler word. State the fact without it.',
+};
+FORBIDDEN.push(SLOP);
+
 const REQUIRED_IN_FILE: Record<string, RegExp[]> = {
   'app/page.tsx': [/Trust Check/, /PG-Presence/],
 };

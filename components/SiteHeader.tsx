@@ -2,10 +2,10 @@ import Link from 'next/link';
 import { DOCS_URL, REPO_URL } from '@/lib/config';
 
 const NAV = [
-  { href: '/#how', label: 'How it works' },
-  { href: '/demo', label: 'Demo' },
-  { href: '/migrate/recaptcha', label: 'Migrate' },
-  { href: '/claim', label: 'Claim your site' },
+  { href: '#how', label: 'How it works' },
+  { href: '#examples', label: 'Examples' },
+  { href: '#migrate', label: 'Migrate' },
+  { href: '#claim', label: 'Claim your site' },
 ];
 
 export function SiteHeader() {
@@ -20,13 +20,9 @@ export function SiteHeader() {
         </Link>
         <nav className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm" aria-label="Main">
           {NAV.map((item) => (
-            <Link
-              key={item.href}
-              href={item.href}
-              className="text-muted no-underline hover:text-ink"
-            >
+            <a key={item.href} href={item.href} className="text-muted no-underline hover:text-ink">
               {item.label}
-            </Link>
+            </a>
           ))}
           <a href={DOCS_URL} className="text-muted no-underline hover:text-ink">
             Docs

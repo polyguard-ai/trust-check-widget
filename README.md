@@ -1,13 +1,15 @@
 # postcaptcha
 
 Postcaptcha replaces reCAPTCHA or Cloudflare Turnstile with a Polyguard Trust
-Check. The visitor confirms with their phone, PG-Presence confirms a real
-device is in front of the screen, and your server verifies the result with one
-POST. No site key, secret or account is needed to start.
+Check. The visitor confirms with their phone, Polyguard checks with PG-Presence
+that a real device is in front of the screen, and your server verifies the
+result with one POST. No site key, secret or account is needed to start.
 
-This repo is the source of [postcaptcha.com](https://postcaptcha.com): the
-landing page with a live demo form, migration guides, the claim page, and
-server-side verification examples you can copy.
+This repo is the source of [postcaptcha.com](https://postcaptcha.com): a
+single page with the widget live, a setup prompt for coding agents,
+`/llms.txt` for the agents themselves, the reCAPTCHA and Turnstile migration
+tables, the claim instructions, and server-side verification examples you
+can copy.
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fpolyguard-ai%2Ftrust-check-widget&project-name=trust-check-widget)
 
@@ -54,12 +56,12 @@ response=<pg-trust-check-response>&remoteip=203.0.113.9
 }
 ```
 
-A result verifies once, within 300 seconds. `secret` is optional until you
+Polyguard accepts each result once, within 300 seconds. `secret` is optional until you
 claim the hostname. Working versions for plain HTML, React, Next.js, Express,
 Flask, PHP and WordPress are in [`examples/`](./examples).
 
-Visitors need a phone. They do not need to install an app: iPhones use an App
-Clip and Android phones a browser check.
+Visitors need a phone. They do not need to install an app: on an iPhone the
+check runs in an App Clip, and on Android it runs in the browser.
 
 ---
 
@@ -82,7 +84,7 @@ the web-sdk branch:
 pnpm fetch-widget
 ```
 
-This clones `polyguard-ai/web-sdk` (branch `claude/trust-check-widget-1afe1d`,
+The script clones `polyguard-ai/web-sdk` (branch `claude/trust-check-widget-1afe1d`,
 override with `SDK_REF`, or point `SDK_DIR` at an existing checkout), runs
 `npm ci && npm run build` in `polyguard-sdk/`, and copies
 `dist/trust-check.js` to `public/vendor/trust-check.js`, which is gitignored.
@@ -123,9 +125,9 @@ app, limited to 100 Trust Checks a day per IP address.
 }
 ```
 
-The site runs in keyless mode, so its first Trust Check in production creates
-an account for `postcaptcha.com`. To move that account into the Polyguard
-account:
+The site uses keyless mode, so Polyguard creates an account for
+`postcaptcha.com` when the first Trust Check runs in production. To move that
+account into the Polyguard account:
 
 1. Sign in to the console and open **Settings → Websites**
    (`https://console.polyguard.ai/settings?claim=postcaptcha.com`). Start the
@@ -135,7 +137,7 @@ account:
 
 If the site is also served on another hostname (for example
 `www.postcaptcha.com` without a redirect), add a second key with its own token.
-See [the claim page](https://postcaptcha.com/claim) for the file rules.
+See [the claim section](https://postcaptcha.com/#claim) for the file rules.
 
 ---
 
@@ -152,17 +154,18 @@ pnpm test:e2e          # Playwright smoke test; run pnpm build first
 pnpm fetch-widget      # Build trust-check.js from web-sdk into public/vendor/
 ```
 
-CI (`.github/workflows/ci.yml`) runs typecheck, lint, positioning lint, build
+The CI workflow (`.github/workflows/ci.yml`) runs typecheck, lint, positioning lint, build
 and the smoke test on every push to `main` and every pull request.
 
 ---
 
 ## Repo layout
 
-- `app/`: pages (`/`, `/demo`, `/migrate/recaptcha`, `/migrate/turnstile`, `/claim`) and `api/submit/route.ts`, the demo form's siteverify handler. No database; nothing is stored.
-- `components/`: the demo form, code tabs, diff tables.
-- `examples/`: copyable verification code. The landing page's code tabs read these files at build time.
-- `lib/`: config, siteverify helpers, migration tables, positioning lint.
+- `app/`: the one page, and `api/submit/route.ts`, the hero's siteverify handler. No database; nothing is stored. `/demo`, `/claim` and `/migrate/*` redirect to the page's sections.
+- `components/`: the hero widget, the flow diagram, the copy-prompt button, the claim link form, the diff table.
+- `public/llms.txt`: integration instructions for coding agents, linked from the page and from the setup prompt.
+- `examples/`: copyable verification code, linked from the page.
+- `lib/`: config (including the agent prompt), siteverify helpers, migration tables, positioning lint.
 - `scripts/fetch-widget.sh`: local widget build.
 - `tests/`: Playwright smoke test, with the widget script and `/api/submit` mocked.
 
