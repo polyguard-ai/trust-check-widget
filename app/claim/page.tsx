@@ -51,8 +51,8 @@ export default function ClaimPage() {
           <p className="m-0 text-lg leading-normal text-muted">
             When a Trust Check runs from a hostname for the first time, Polyguard creates a free
             account and a Custom app for it. Your free account is limited to 1,000 Trust Checks a
-            week across everything in it. When you claim the hostname, Polyguard transfers that
-            account to you. You prove control of the hostname by publishing one file.
+            week. When you claim the hostname, Polyguard transfers that account to you. You prove
+            control of the hostname by publishing one file.
           </p>
         </header>
 
