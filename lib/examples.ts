@@ -6,7 +6,6 @@ import type { Lang } from './highlight';
 export type Example = { label: string; path: string; lang: Lang; note?: string };
 
 export const EXAMPLES: Example[] = [
-  { label: 'HTML', path: 'examples/html/index.html', lang: 'html' },
   {
     label: 'React',
     path: 'examples/react/TrustCheckForm.tsx',
@@ -15,6 +14,7 @@ export const EXAMPLES: Example[] = [
   },
   { label: 'Next.js', path: 'examples/nextjs/route.ts', lang: 'ts' },
   { label: 'Express', path: 'examples/express/middleware.js', lang: 'js' },
+  { label: 'HTML', path: 'examples/html/index.html', lang: 'html' },
   { label: 'Flask', path: 'examples/python-flask/verify.py', lang: 'python' },
   { label: 'PHP', path: 'examples/php/verify.php', lang: 'php' },
 ];
