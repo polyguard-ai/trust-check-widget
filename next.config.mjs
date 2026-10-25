@@ -2,7 +2,12 @@
 const nextConfig = {
   poweredByHeader: false,
   async redirects() {
-    return [{ source: '/migrate', destination: '/migrate/recaptcha', permanent: false }];
+    return [
+      { source: '/demo', destination: '/#demo', permanent: false },
+      { source: '/claim', destination: '/#claim', permanent: false },
+      { source: '/migrate', destination: '/#migrate', permanent: false },
+      { source: '/migrate/:from', destination: '/#migrate', permanent: false },
+    ];
   },
   async headers() {
     return [

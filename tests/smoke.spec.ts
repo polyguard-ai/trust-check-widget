@@ -57,9 +57,7 @@ async function mockWidget(page: Page) {
   );
 }
 
-test('landing page shows the siteverify result after the Trust Check callback', async ({
-  page,
-}) => {
+test('hero shows the siteverify result after the Trust Check callback', async ({ page }) => {
   await mockWidget(page);
   let posted: string | null = null;
   await page.route('**/api/submit', async (route) => {
@@ -89,51 +87,37 @@ test('landing page shows the siteverify result after the Trust Check callback', 
   await expect(container.locator('input[name="pg-trust-check-response"]')).toHaveCount(0);
 });
 
-test('landing page links the agent instructions', async ({ page, request }) => {
+test('one page: nav anchors, sections and the agent instructions', async ({ page, request }) => {
   await mockWidget(page);
   await page.goto('/');
+  for (const id of ['how', 'examples', 'migrate', 'claim']) {
+    await expect(page.locator(`#${id}`)).toHaveCount(1);
+    await expect(page.locator(`header a[href="#${id}"]`)).toHaveCount(1);
+  }
   await expect(
     page.getByRole('button', { name: 'Copy setup prompt for your agent' }),
   ).toBeVisible();
   await expect(
     page.getByRole('link', { name: 'https://postcaptcha.com/llms.txt' }),
   ).toHaveAttribute('href', '/llms.txt');
+  await expect(page.locator('footer a[href="https://trust.polyguard.ai"]')).toHaveText('Security');
   const res = await request.get('/llms.txt');
   expect(res.status()).toBe(200);
   expect(await res.text()).toContain('/v2/siteverify');
 });
 
-test('demo form submits only after the Trust Check callback', async ({ page }) => {
-  await mockWidget(page);
-  await page.route('**/api/submit', (route) => route.fulfill({ json: VERIFIED }));
-
-  await page.goto('/demo');
-  const form = page.locator('form#contact');
-  const container = form.locator('.pg-trust-check');
-  await expect(container).toHaveCount(1);
-
-  const send = form.getByRole('button', { name: 'Send' });
-  await expect(send).toBeDisabled();
-
-  await form.getByLabel('Your name').fill('Sam Rivera');
-  await form.getByLabel('Message').fill('Hello from a person');
-  await container.getByRole('button', { name: 'Mock Trust Check' }).click();
-  await expect(send).toBeEnabled();
-
-  await send.click();
-  await expect(form.getByTestId('submit-outcome')).toContainText('Verified');
-  // The response verifies once, so Send is disabled again.
-  await expect(send).toBeDisabled();
+test('old page paths redirect to the landing page sections', async ({ request }) => {
+  for (const [path, target] of [
+    ['/demo', '/#demo'],
+    ['/claim', '/#claim'],
+    ['/migrate/recaptcha', '/#migrate'],
+    ['/migrate/turnstile', '/#migrate'],
+  ]) {
+    const res = await request.get(path, { maxRedirects: 0 });
+    expect(res.status(), path).toBe(307);
+    expect(res.headers()['location'], path).toBe(target);
+  }
 });
-
-for (const path of ['/migrate/recaptcha', '/migrate/turnstile', '/claim']) {
-  test(`${path} renders`, async ({ page }) => {
-    await mockWidget(page);
-    const res = await page.goto(path);
-    expect(res?.status()).toBe(200);
-    await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
-  });
-}
 
 test('claim file is served as JSON', async ({ request }) => {
   const res = await request.get('/.well-known/polyguard.json');

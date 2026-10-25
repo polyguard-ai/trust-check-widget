@@ -25,7 +25,7 @@ Facts to keep in mind:
   Re-render or reset the widget for a second submission.
 - The first Trust Check from a new hostname creates a free account for that
   hostname, limited to 1,000 Trust Checks per ISO week. The site owner can
-  claim it later: https://postcaptcha.com/claim
+  claim it later: https://postcaptcha.com/#claim
 - `localhost`, `127.0.0.1`, `[::1]` and `*.localhost` work, limited to 100
   Trust Checks a day per IP address.
 - Every Trust Check is interactive. There is no invisible or score-only mode.
@@ -150,8 +150,7 @@ the language's HTTP client, following the rules above.
 - Not supported: `data-sitekey` (ignored), `data-appearance`, reCAPTCHA
   invisible, Turnstile managed/non-interactive/invisible modes.
 
-Full diffs: https://postcaptcha.com/migrate/recaptcha and
-https://postcaptcha.com/migrate/turnstile
+Full tables: https://postcaptcha.com/#migrate
 
 ## After integrating
 
@@ -159,5 +158,5 @@ Tell the site owner:
 
 - The account for the hostname is free and limited to 1,000 Trust Checks per
   week. To manage it, claim the hostname by publishing
-  `/.well-known/polyguard.json`: https://postcaptcha.com/claim
+  `/.well-known/polyguard.json`: https://postcaptcha.com/#claim
 - Visitors need a phone.

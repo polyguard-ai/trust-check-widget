@@ -5,9 +5,11 @@ Check. The visitor confirms with their phone, Polyguard checks with PG-Presence
 that a real device is in front of the screen, and your server verifies the
 result with one POST. No site key, secret or account is needed to start.
 
-This repo is the source of [postcaptcha.com](https://postcaptcha.com): the
-landing page with a live demo form, migration guides, the claim page, and
-server-side verification examples you can copy.
+This repo is the source of [postcaptcha.com](https://postcaptcha.com): a
+single page with the widget live, a setup prompt for coding agents,
+`/llms.txt` for the agents themselves, the reCAPTCHA and Turnstile migration
+tables, the claim instructions, and server-side verification examples you
+can copy.
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fpolyguard-ai%2Ftrust-check-widget&project-name=trust-check-widget)
 
@@ -135,7 +137,7 @@ account into the Polyguard account:
 
 If the site is also served on another hostname (for example
 `www.postcaptcha.com` without a redirect), add a second key with its own token.
-See [the claim page](https://postcaptcha.com/claim) for the file rules.
+See [the claim section](https://postcaptcha.com/#claim) for the file rules.
 
 ---
 
@@ -159,10 +161,11 @@ and the smoke test on every push to `main` and every pull request.
 
 ## Repo layout
 
-- `app/`: pages (`/`, `/demo`, `/migrate/recaptcha`, `/migrate/turnstile`, `/claim`) and `api/submit/route.ts`, the demo form's siteverify handler. No database; nothing is stored.
-- `components/`: the demo form, code tabs, diff tables.
-- `examples/`: copyable verification code. `lib/examples.ts` reads these files at build time for the landing page's code tabs.
-- `lib/`: config, siteverify helpers, migration tables, positioning lint.
+- `app/`: the one page, and `api/submit/route.ts`, the hero's siteverify handler. No database; nothing is stored. `/demo`, `/claim` and `/migrate/*` redirect to the page's sections.
+- `components/`: the hero widget, the flow diagram, the copy-prompt button, the claim link form, the diff table.
+- `public/llms.txt`: integration instructions for coding agents, linked from the page and from the setup prompt.
+- `examples/`: copyable verification code, linked from the page.
+- `lib/`: config (including the agent prompt), siteverify helpers, migration tables, positioning lint.
 - `scripts/fetch-widget.sh`: local widget build.
 - `tests/`: Playwright smoke test, with the widget script and `/api/submit` mocked.
 

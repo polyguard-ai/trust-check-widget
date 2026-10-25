@@ -22,8 +22,7 @@ The CI workflow runs the same steps.
    `remoteip` when you have it) to `https://api.polyguard.ai/v2/siteverify`
    with a timeout, then require `success === true` **and** compare `hostname`
    with the site's own hostname. Treat `secret` as optional.
-3. List it in `examples/README.md`. To show it on the landing page, add it to
-   `EXAMPLES` in `lib/examples.ts`.
+3. List it in `examples/README.md` and in the stack list in `public/llms.txt`.
 
 ## Copy rules
 
