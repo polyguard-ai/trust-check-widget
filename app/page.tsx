@@ -1,11 +1,12 @@
 import Image from 'next/image';
 import { ClaimLinkForm } from '@/components/ClaimLinkForm';
 import { CopyPromptButton } from '@/components/CopyPromptButton';
-import { FlowDiagram } from '@/components/FlowDiagram';
+import { FlowLane, ONE_DEVICE, TWO_DEVICES } from '@/components/FlowDiagram';
 import { HeroTrustCheck } from '@/components/HeroTrustCheck';
 import { MigrationSteps } from '@/components/MigrationSteps';
 import { AGENT_PROMPT, DOCS_URL, LLMS_TXT_URL, REPO_URL } from '@/lib/config';
 import { DIFFERENCES, RECAPTCHA, TURNSTILE } from '@/lib/migrations';
+import oneDevice from '@/public/one-device.webp';
 import photo from '@/public/trust-check-in-use.webp';
 
 const WHY = [
@@ -106,20 +107,10 @@ export default function Home() {
                 How it works
               </a>
             </div>
-            <div className="flex items-center gap-4">
-              <Image
-                src={photo}
-                alt="A person holding a phone up to a laptop screen that shows a Trust Check code."
-                width={96}
-                className="h-auto w-24 flex-none rounded-lg"
-                sizes="96px"
-                priority
-              />
-              <p className="m-0 max-w-[360px] text-[13px] leading-relaxed text-muted">
-                Your visitor holds their phone up to the screen for a few seconds. They need a
-                phone, but they do not need to install an app.
-              </p>
-            </div>
+            <p className="m-0 text-[13px] text-muted">
+              Your visitor holds their phone up to the screen for a few seconds. They need a phone,
+              but they do not need to install an app.
+            </p>
           </div>
           <div className="min-w-0 flex-[0_1_420px]">
             <HeroTrustCheck />
@@ -132,7 +123,32 @@ export default function Home() {
           <h2 id="how-title" className="m-0 text-3xl font-bold">
             How it works
           </h2>
-          <FlowDiagram />
+          <div className="flex flex-col gap-10">
+            <div className="flex flex-wrap items-center gap-8">
+              <Image
+                src={photo}
+                alt="A person holding a phone up to a laptop screen that shows a Trust Check code."
+                width={160}
+                className="h-auto w-40 flex-none rounded-lg"
+                sizes="160px"
+              />
+              <div className="min-w-0 flex-[1_1_480px]">
+                <FlowLane lane={TWO_DEVICES} id="two" />
+              </div>
+            </div>
+            <div className="flex flex-wrap items-center gap-8">
+              <Image
+                src={oneDevice}
+                alt="The Polyguard hand-off page on a phone, with a Verify without download button."
+                width={160}
+                className="h-auto w-40 flex-none rounded-lg border border-line"
+                sizes="160px"
+              />
+              <div className="min-w-0 flex-[1_1_480px]">
+                <FlowLane lane={ONE_DEVICE} id="one" />
+              </div>
+            </div>
+          </div>
           <p className="m-0 max-w-[820px] text-[15px] leading-relaxed text-muted">
             A traditional CAPTCHA is a puzzle, and LLMs solve puzzles now. Postcaptcha uses
             Polyguard Trust Checks instead, which confirm physical things: a real phone, held up to
