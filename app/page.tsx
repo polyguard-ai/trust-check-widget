@@ -94,8 +94,8 @@ export default function Home() {
             <p className="m-0 text-lg leading-normal text-muted">
               A CAPTCHA asks your visitor to solve a puzzle, and AI agents solve puzzles. A
               Polyguard Trust Check asks for something an agent cannot do: hold a phone up to the
-              screen. If you use reCAPTCHA or Turnstile today, you change the script URL and one
-              server call.
+              screen. If you use reCAPTCHA or Turnstile today, you can block agents by changing the
+              script URL and one server call.
             </p>
             <div className="flex flex-wrap gap-3">
               <CopyPromptButton
