@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { CopyPromptButton } from '@/components/CopyPromptButton';
 import { FlowLane, ONE_DEVICE, TWO_DEVICES } from '@/components/FlowDiagram';
 import { HeroTrustCheck } from '@/components/HeroTrustCheck';
+import { withCode } from '@/components/InlineCode';
 import { MigrationSteps } from '@/components/MigrationSteps';
 import { AGENT_PROMPT, CONSOLE_CLAIM_URL, DOCS_URL, LLMS_TXT_URL, REPO_URL } from '@/lib/config';
 import { DIFFERENCES, RECAPTCHA, TURNSTILE } from '@/lib/migrations';
@@ -209,7 +210,7 @@ export default function Home() {
             <h3 className="m-0 text-lg font-semibold">What is different</h3>
             <ul className="m-0 flex max-w-[860px] list-disc flex-col gap-2 pl-5 text-[15px] leading-relaxed text-muted">
               {DIFFERENCES.map((d) => (
-                <li key={d}>{d}</li>
+                <li key={d}>{withCode(d)}</li>
               ))}
             </ul>
           </div>

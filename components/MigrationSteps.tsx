@@ -1,9 +1,10 @@
+import { withCode } from '@/components/InlineCode';
 import type { Migration, MigrationStep } from '@/lib/migrations';
 
 function Step({ step, muted }: { step: MigrationStep; muted?: boolean }) {
   return (
     <li className="flex flex-col gap-1.5">
-      <span>{step.text}</span>
+      <span>{withCode(step.text)}</span>
       {step.from && step.to && (
         <span className="flex flex-wrap items-center gap-x-2 gap-y-1 font-mono text-[13px]">
           <span
