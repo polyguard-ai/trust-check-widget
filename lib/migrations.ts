@@ -35,6 +35,7 @@ if (!result.success || result.hostname !== 'www.example.com') {
 }`;
 
 const SHARED_DIFFERENCES = [
+  'The minimum change is the script URL and the server call. The widget also renders the old container class, keeps the old hidden field name for it, and defines the old JS global when the page has not. Rename them when convenient.',
   'No site key or account is needed to start. Polyguard creates the account when the first Trust Check runs from your hostname.',
   'secret is optional. After you claim the hostname, you can send the App API key as secret and, on the app’s Advanced tab, make it required.',
   'Polyguard compares remoteip with the address that requested the widget’s ticket and reports the result as remoteip_matched. A mismatch never changes success, because mobile carriers and corporate proxies can change a visitor’s address between the click and the form post.',
@@ -52,11 +53,20 @@ export const RECAPTCHA: Migration = {
       from: 'https://www.google.com/recaptcha/api.js',
       to: 'https://cdn.polyguard.ai/sdk/latest/trust-check.js',
     },
-    { from: 'class="g-recaptcha" data-sitekey="…"', to: 'class="pg-trust-check"' },
-    { from: 'g-recaptcha-response', to: 'pg-trust-check-response' },
     {
-      from: 'grecaptcha.render/reset/getResponse',
-      to: 'Polyguard.TrustCheck.render/reset/getResponse',
+      from: 'class="g-recaptcha" data-sitekey="…"',
+      to: 'class="pg-trust-check"',
+      note: 'optional: .g-recaptcha is also rendered; data-sitekey is ignored',
+    },
+    {
+      from: 'g-recaptcha-response',
+      to: 'pg-trust-check-response',
+      note: 'optional: a .g-recaptcha container keeps the g-recaptcha-response field name',
+    },
+    {
+      from: 'grecaptcha.render/reset/getResponse/ready',
+      to: 'Polyguard.TrustCheck.render/reset/getResponse/ready',
+      note: 'optional: window.grecaptcha is defined with these methods when the page has not defined it',
     },
     {
       from: 'POST /recaptcha/api/siteverify with secret, response, remoteip',
@@ -104,11 +114,20 @@ export const TURNSTILE: Migration = {
       from: 'challenges.cloudflare.com/turnstile/v0/api.js',
       to: 'cdn.polyguard.ai/sdk/latest/trust-check.js',
     },
-    { from: 'class="cf-turnstile" data-sitekey', to: 'class="pg-trust-check"' },
-    { from: 'cf-turnstile-response', to: 'pg-trust-check-response' },
+    {
+      from: 'class="cf-turnstile" data-sitekey',
+      to: 'class="pg-trust-check"',
+      note: 'optional: .cf-turnstile is also rendered; data-sitekey is ignored',
+    },
+    {
+      from: 'cf-turnstile-response',
+      to: 'pg-trust-check-response',
+      note: 'optional: a .cf-turnstile container keeps the cf-turnstile-response field name; data-response-field-name also works',
+    },
     {
       from: 'turnstile.render/reset/remove/getResponse/isExpired/execute/ready',
       to: 'same names under Polyguard.TrustCheck',
+      note: 'optional: window.turnstile is defined with these methods when the page has not defined it',
     },
     {
       from: 'data-action, data-cdata, data-theme, data-size, data-execution',

@@ -19,9 +19,11 @@ export function MigrationGuide({ migration: m }: { migration: Migration }) {
             From {m.fromLabel} to a Polyguard Trust Check
           </h1>
           <p className="m-0 max-w-[760px] text-lg leading-normal text-muted">
-            Change one script URL, one class name, one hidden field name and one server call. Your
-            server keeps comparing <span className="font-mono">hostname</span>, as the {m.name}{' '}
-            documentation already instructs.
+            Change the script URL and the server call. The widget also renders your existing
+            container, keeps its hidden field name, and defines the old JS global when the page has
+            not, so the class name, field name and global can be renamed later. Your server keeps
+            comparing <span className="font-mono">hostname</span>, as the {m.name} documentation
+            already instructs.
           </p>
           <p className="m-0 text-sm">
             <Link href={other.href}>{other.label}</Link>

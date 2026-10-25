@@ -233,7 +233,8 @@ export default async function Home() {
           <div className="flex min-w-0 flex-col gap-1.5">
             <h2 className="m-0 text-[22px] font-bold">Coming from reCAPTCHA or Turnstile?</h2>
             <p className="m-0 text-sm text-muted">
-              Side-by-side diffs of the script URL, class name, hidden field and endpoint.
+              Change the script URL and your server call. The class name, hidden field and JS global
+              keep working.
             </p>
           </div>
           <div className="flex flex-wrap gap-3">
