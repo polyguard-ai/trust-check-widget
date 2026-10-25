@@ -201,12 +201,12 @@ export default async function Home() {
       <section id="claim" className="px-4 py-16 sm:px-6">
         <div className="mx-auto flex max-w-[1120px] flex-wrap gap-10">
           <div className="flex min-w-0 flex-[1_1_420px] flex-col gap-3.5">
-            <h2 className="m-0 text-3xl font-bold">Your site, your account</h2>
+            <h2 className="m-0 text-3xl font-bold">Free, and no signup required</h2>
             <p className="m-0 text-[15px] leading-relaxed text-muted">
-              When a Trust Check runs from a hostname for the first time, Polyguard creates an
-              account and a Custom app for that hostname. The account is limited to 1,000 Trust
-              Checks per week across every hostname and page in it. To manage the account, sign in
-              to the console and claim the hostname by publishing one file.
+              When a Trust Check runs from a hostname for the first time, Polyguard creates a free
+              account and a Custom app for that hostname. Your free account is limited to 1,000
+              Trust Checks per week across every hostname and page in it. To manage it, sign in to
+              the console and claim the hostname by publishing one file.
             </p>
             <Link
               href="/claim"

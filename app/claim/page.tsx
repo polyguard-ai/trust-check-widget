@@ -42,15 +42,17 @@ export default function ClaimPage() {
     <div className="px-4 py-14 sm:px-6">
       <div className="mx-auto flex max-w-[1120px] flex-col gap-12">
         <header className="flex max-w-[820px] flex-col gap-3">
-          <span className="text-[13px] font-semibold text-primary">Your site, your account</span>
+          <span className="text-[13px] font-semibold text-primary">
+            Free, and no signup required
+          </span>
           <h1 className="m-0 text-4xl leading-tight font-bold tracking-[-0.01em]">
             Claim your site
           </h1>
           <p className="m-0 text-lg leading-normal text-muted">
-            When a Trust Check runs from a hostname for the first time, Polyguard creates an account
-            and a Custom app for it, limited to 1,000 Trust Checks a week across everything in the
-            account. When you claim the hostname, Polyguard transfers that account to you. You prove
-            control of the hostname by publishing one file.
+            When a Trust Check runs from a hostname for the first time, Polyguard creates a free
+            account and a Custom app for it. Your free account is limited to 1,000 Trust Checks a
+            week across everything in it. When you claim the hostname, Polyguard transfers that
+            account to you. You prove control of the hostname by publishing one file.
           </p>
         </header>
 
