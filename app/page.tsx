@@ -30,7 +30,7 @@ const CLAIM_REASONS = [
   },
   {
     title: 'Lock it down',
-    body: 'Require a secret on every siteverify call, so only your server can verify results for your website.',
+    body: 'Require a secret on every siteverify call to prevent spoofed hostnames from polluting your analytics.',
   },
   {
     title: 'Ask for more than presence',
