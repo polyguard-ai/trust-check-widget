@@ -48,8 +48,6 @@ export function HeroTrustCheck() {
           form.set(RESPONSE_FIELD, value);
           setResult(await submitTrustCheck(form));
           setPhase('done');
-          // The response verifies once; the next click starts a new Trust Check.
-          if (widgetId.current) trustCheckApi()?.reset(widgetId.current);
         },
         'expired-callback': () => setPhase('idle'),
         'error-callback': (code: string) => {
@@ -67,6 +65,13 @@ export function HeroTrustCheck() {
   }, []);
 
   const verified = isVerified(result);
+
+  // The response verified once, so another check needs a reset widget.
+  function runAgain() {
+    if (widgetId.current) trustCheckApi()?.reset(widgetId.current);
+    setResult(null);
+    setPhase('idle');
+  }
 
   return (
     <div
@@ -113,6 +118,13 @@ export function HeroTrustCheck() {
           >
             {JSON.stringify(result.body, null, 2)}
           </pre>
+          <button
+            type="button"
+            onClick={runAgain}
+            className="inline-flex h-10 items-center self-start rounded-md border border-line-strong px-4 text-sm font-semibold text-ink hover:bg-surface"
+          >
+            Run another check
+          </button>
         </div>
       )}
     </div>

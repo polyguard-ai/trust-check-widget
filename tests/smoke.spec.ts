@@ -81,6 +81,12 @@ test('landing page shows the siteverify result after the Trust Check callback', 
   await expect(hero.getByTestId('submit-outcome')).toContainText('Verified');
   await expect(hero.getByTestId('submit-result')).toContainText('"score": "PASS"');
   expect(posted).toContain(SESSION);
+
+  // The widget keeps its verified state until the visitor asks for another check.
+  await expect(container.locator('input[name="pg-trust-check-response"]')).toHaveCount(1);
+  await hero.getByRole('button', { name: 'Run another check' }).click();
+  await expect(hero.getByTestId('submit-result')).toHaveCount(0);
+  await expect(container.locator('input[name="pg-trust-check-response"]')).toHaveCount(0);
 });
 
 test('landing page links the agent instructions', async ({ page, request }) => {
