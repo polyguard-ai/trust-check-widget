@@ -31,7 +31,7 @@ export function ClaimLinkForm() {
       }}
     >
       <label className="flex flex-col gap-1.5 text-[13px] font-medium">
-        Hostname to claim
+        Your website
         <input
           value={input}
           onChange={(e) => setInput(e.target.value)}
@@ -51,7 +51,7 @@ export function ClaimLinkForm() {
           disabled={!valid}
           className="inline-flex h-11 items-center rounded-md bg-primary px-4 font-semibold text-white enabled:hover:bg-primary-strong disabled:cursor-not-allowed disabled:bg-line-strong disabled:text-muted"
         >
-          Claim in the console
+          Claim it in the console
         </button>
         <span className="min-w-0 break-all font-mono text-xs text-muted">{href}</span>
       </div>

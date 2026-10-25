@@ -74,6 +74,7 @@ test('hero shows the siteverify result after the Trust Check callback', async ({
   const container = hero.locator('.pg-trust-check');
   await expect(container).toHaveCount(1);
   await expect(hero.getByTestId('submit-result')).toHaveCount(0);
+  await expect(hero.getByTestId('submit-placeholder')).toHaveCount(1);
 
   await container.getByRole('button', { name: 'Mock Trust Check' }).click();
   await expect(hero.getByTestId('submit-outcome')).toContainText('Verified');

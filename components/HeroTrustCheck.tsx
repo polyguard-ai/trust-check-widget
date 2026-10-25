@@ -78,13 +78,7 @@ export function HeroTrustCheck() {
       id="demo"
       className="flex min-w-0 flex-col gap-3.5 rounded-xl border border-line bg-white p-6 shadow-[0_12px_40px_rgba(16,24,35,0.08)]"
     >
-      <div className="flex flex-col gap-1">
-        <h2 className="m-0 text-lg font-semibold">Try it</h2>
-        <p className="m-0 text-sm text-muted">
-          Click the box and scan the code with your phone. The JSON our server receives from{' '}
-          <span className="font-mono">/v2/siteverify</span> appears below.
-        </p>
-      </div>
+      <h2 className="m-0 text-lg font-semibold">Try it</h2>
 
       <div ref={container} className="pg-trust-check min-h-[65px]" data-testid="trust-check" />
 
@@ -103,6 +97,15 @@ export function HeroTrustCheck() {
         <p role="status" className="m-0 text-[13px] text-muted">
           Verifying with /v2/siteverify…
         </p>
+      )}
+
+      {!result && phase !== 'done' && (
+        <div
+          data-testid="submit-placeholder"
+          className="flex min-h-[120px] items-center justify-center rounded-lg border border-dashed border-line-strong bg-surface p-4 text-center font-mono text-xs text-muted"
+        >
+          The JSON our server receives from /v2/siteverify appears here.
+        </div>
       )}
 
       {result && phase === 'done' && (

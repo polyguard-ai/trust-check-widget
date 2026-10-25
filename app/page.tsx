@@ -1,20 +1,12 @@
 import Image from 'next/image';
 import { ClaimLinkForm } from '@/components/ClaimLinkForm';
-import { CodeBlock } from '@/components/CodeBlock';
 import { CopyPromptButton } from '@/components/CopyPromptButton';
-import { DiffTable } from '@/components/DiffTable';
 import { FlowDiagram } from '@/components/FlowDiagram';
 import { HeroTrustCheck } from '@/components/HeroTrustCheck';
+import { MigrationSteps } from '@/components/MigrationSteps';
 import { AGENT_PROMPT, DOCS_URL, LLMS_TXT_URL, REPO_URL } from '@/lib/config';
 import { DIFFERENCES, RECAPTCHA, TURNSTILE } from '@/lib/migrations';
 import photo from '@/public/trust-check-in-use.webp';
-
-const CLAIM_FILE = `{
-  "site_verification": {
-    "www.example.com": "pgsv_4Qm9…Xk2",
-    "example.com": "pgsv_8Lp2…Qa7"
-  }
-}`;
 
 const WHY = [
   {
@@ -31,29 +23,29 @@ const WHY = [
   },
 ];
 
-const CLAIM_RULES = [
-  'Serve the file at exactly /.well-known/polyguard.json over https. Polyguard does not follow redirects.',
-  'Any content type is accepted. The body must be a JSON object under 16 KiB.',
-  'Each hostname is claimed separately. www.example.com and example.com are different hostnames, each with its own entry and token.',
-  'A value can be a list of tokens, so two people in one organization can start a claim at the same time. A hostname still belongs to one account.',
-  'Claim tokens expire after 7 days. The file is not needed once the claim succeeds.',
-];
-
-const CLAIM_UNLOCKS = [
-  'The app in the Polyguard console, with its per-page links and settings.',
-  'App API keys, to send as secret on /v2/siteverify, and the option to require one.',
-  'Webhooks, if you would rather receive results than call siteverify.',
-  'Other proofs and a higher weekly limit, on request.',
+const CLAIM_REASONS = [
+  {
+    title: 'See your Trust Checks',
+    body: 'Analytics for every postcaptcha Trust Check on your website: how many ran, how many passed, and when.',
+  },
+  {
+    title: 'Lock it down',
+    body: 'Require a secret on every siteverify call, so only your server can verify results for your website.',
+  },
+  {
+    title: 'Ask for more than presence',
+    body: 'Add other Polyguard proofs to the same widget, such as location or identity checks, through the Polyguard SDK.',
+  },
 ];
 
 const FAQ = [
   {
     q: 'What happens at 1,000 checks?',
-    a: 'The widget shows "Unavailable this week" on every page in the account until Monday 00:00 UTC. Claim the hostname and contact us to raise the limit.',
+    a: 'The widget shows "Unavailable this week" on every page in the account until Monday 00:00 UTC. Claim your website and contact us to raise the limit.',
   },
   {
     q: 'Do I need a secret key?',
-    a: 'No. A result can be verified once, and the response includes the hostname of the page where the check ran. After you claim the hostname you can require an API key on siteverify, or receive results by webhook instead.',
+    a: 'No. A result can be verified once, and the response includes the hostname of the page where the check ran. After you claim your website you can require an API key on siteverify, or receive results by webhook instead.',
   },
   {
     q: 'Do visitors need to install an app?',
@@ -69,7 +61,7 @@ const FAQ = [
   },
   {
     q: 'Can I ask for more than presence?',
-    a: 'Not in this mode. Name, location, phone and document proofs are available on a claimed account through the Polyguard SDK.',
+    a: 'Not in keyless mode. Name, location, phone and document proofs are available on a claimed account through the Polyguard SDK.',
   },
   {
     q: 'My pages have dynamic paths. Is that a problem?',
@@ -124,8 +116,8 @@ export default function Home() {
                 priority
               />
               <p className="m-0 max-w-[360px] text-[13px] leading-relaxed text-muted">
-                The visitor holds their phone up to the screen for a few seconds. They need a phone.
-                They do not need to install an app.
+                Your visitor holds their phone up to the screen for a few seconds. They need a
+                phone, but they do not need to install an app.
               </p>
             </div>
           </div>
@@ -142,21 +134,14 @@ export default function Home() {
           </h2>
           <FlowDiagram />
           <p className="m-0 max-w-[820px] text-[15px] leading-relaxed text-muted">
-            On a laptop or desktop, the widget displays a code that changes rapidly and the visitor
-            holds their phone camera up to it. On a phone, the widget opens the check on that phone:
-            an App Clip on iPhone, the browser on Android, or Polyguard Mobile if it is installed.
-            Either way the widget writes the result into your form and your server verifies it with
-            one POST, comparing <span className="font-mono">hostname</span> with its own as with
-            reCAPTCHA or Turnstile.
+            A traditional CAPTCHA is a puzzle, and LLMs solve puzzles now. Postcaptcha uses
+            Polyguard Trust Checks instead, which confirm physical things: a real phone, held up to
+            the screen by the person filling in your form.
           </p>
         </div>
       </section>
 
-      <section
-        id="examples"
-        className="scroll-mt-4 px-4 pb-16 sm:px-6"
-        aria-labelledby="examples-title"
-      >
+      <section id="examples" className="px-4 pb-16 sm:px-6" aria-labelledby="examples-title">
         <div className="mx-auto flex max-w-[1120px] flex-col gap-6">
           <h2 id="examples-title" className="m-0 text-3xl font-bold">
             Add it to your site
@@ -165,8 +150,7 @@ export default function Home() {
             <div className="flex min-w-0 flex-col gap-3 rounded-xl border border-line bg-surface p-6">
               <h3 className="m-0 text-lg font-semibold">If you are a person</h3>
               <p className="m-0 text-sm text-muted">
-                Copy this prompt and give it to your coding agent. It points at the instructions for
-                agents and names what to check on the server.
+                Copy this prompt and paste it to your coding agent.
               </p>
               <pre className="m-0 rounded-lg border border-line bg-white p-4 font-mono text-xs leading-relaxed whitespace-pre-wrap text-ink">
                 {AGENT_PROMPT}
@@ -207,17 +191,8 @@ export default function Home() {
               Coming from reCAPTCHA or Turnstile?
             </h2>
             <p className="m-0 text-[15px] text-muted">
-              Change the script URL and your server call. The class name, hidden field and JS global
-              keep working.
+              Just change the script URL and your server-side call to siteverify.
             </p>
-          </div>
-          <div className="flex flex-col gap-3">
-            <h3 className="m-0 text-lg font-semibold">From {RECAPTCHA.fromLabel}</h3>
-            <DiffTable fromLabel={RECAPTCHA.fromLabel} rows={RECAPTCHA.rows} />
-          </div>
-          <div className="flex flex-col gap-3">
-            <h3 className="m-0 text-lg font-semibold">From {TURNSTILE.fromLabel}</h3>
-            <DiffTable fromLabel={TURNSTILE.fromLabel} rows={TURNSTILE.rows} />
           </div>
           <div className="flex flex-col gap-3">
             <h3 className="m-0 text-lg font-semibold">What is different</h3>
@@ -227,18 +202,22 @@ export default function Home() {
               ))}
             </ul>
           </div>
+          <div className="grid gap-6 lg:grid-cols-2">
+            <MigrationSteps migration={RECAPTCHA} />
+            <MigrationSteps migration={TURNSTILE} />
+          </div>
         </div>
       </section>
 
       <section className="bg-ink px-4 py-16 text-white sm:px-6" aria-labelledby="why-title">
         <div className="mx-auto flex max-w-[1120px] flex-col gap-7">
           <h2 id="why-title" className="m-0 text-3xl font-bold">
-            Why an AI agent cannot submit your form
+            Why an AI agent cannot bypass postcaptcha
           </h2>
           <p className="m-0 max-w-[760px] text-base leading-relaxed text-on-dark">
-            A CAPTCHA tests whether the visitor can solve a puzzle on the screen, and language
-            models solve those puzzles now. PG-Presence tests an action in the physical world: a
-            phone held up to the screen. A browser cannot perform it.
+            A CAPTCHA tests whether the visitor can solve a puzzle on the screen, and agents can.
+            Postcaptcha tests an action in the physical world: a phone held up to the screen. Agents
+            don&apos;t have hands.
           </p>
           <div className="grid gap-6 md:grid-cols-3">
             {WHY.map((item) => (
@@ -258,67 +237,24 @@ export default function Home() {
               Free, and no signup required
             </h2>
             <p className="m-0 text-[15px] leading-relaxed text-muted">
-              When a Trust Check runs from a hostname for the first time, Polyguard creates a free
-              account and a Custom app for that hostname. Your free account is limited to 1,000
-              Trust Checks per week. To manage it, sign in to the console and claim the hostname by
-              publishing one file. You prove control of the hostname; nothing else is asked.
+              When a Trust Check runs from your website for the first time, Polyguard creates a free
+              account for it. Your free account is limited to 1,000 Trust Checks per week. To manage
+              it, sign in to the console and claim your website by publishing a verification file.
             </p>
           </div>
-          <div className="flex flex-wrap gap-10">
-            <div className="flex min-w-0 flex-[1_1_420px] flex-col gap-4">
-              <h3 className="m-0 text-lg font-semibold">Three steps</h3>
-              <ol className="m-0 flex list-decimal flex-col gap-3 pl-5 text-[15px] leading-relaxed text-muted">
-                <li>
-                  Sign in to the Polyguard console (sign-in is itself a Trust Check) and open
-                  Settings, then Websites. Enter the hostname and start the claim. The form below
-                  builds a console link with the hostname filled in.
-                </li>
-                <li>
-                  Publish the file the console shows at{' '}
-                  <span className="font-mono">
-                    https://your-hostname/.well-known/polyguard.json
-                  </span>
-                  .
-                </li>
-                <li>
-                  Click Verify. Polyguard fetches the file and, if the token matches, moves the app
-                  and its links into your account. If you already have an account, Polyguard merges
-                  the hostname&apos;s account into it.
-                </li>
-              </ol>
-              <ClaimLinkForm />
-            </div>
-            <div className="flex min-w-0 flex-[1_1_420px] flex-col gap-3">
-              <span className="text-[13px] font-semibold break-all text-primary">
-                https://www.example.com/.well-known/polyguard.json
-              </span>
-              <CodeBlock code={CLAIM_FILE} lang="json" />
-              <ul className="m-0 flex list-disc flex-col gap-1.5 pl-5 text-[13px] leading-relaxed text-muted">
-                {CLAIM_RULES.map((r) => (
-                  <li key={r}>{r}</li>
-                ))}
-              </ul>
-              <p className="m-0 text-[13px] text-muted">
-                This site serves its own file at{' '}
-                <a href="/.well-known/polyguard.json" className="font-mono">
-                  /.well-known/polyguard.json
-                </a>
-                .
-              </p>
-            </div>
+          <div className="grid gap-6 md:grid-cols-3">
+            {CLAIM_REASONS.map((r) => (
+              <div
+                key={r.title}
+                className="flex min-w-0 flex-col gap-2 rounded-xl border border-line bg-surface p-6"
+              >
+                <h3 className="m-0 text-lg font-semibold">{r.title}</h3>
+                <p className="m-0 text-sm leading-relaxed text-muted">{r.body}</p>
+              </div>
+            ))}
           </div>
-          <div className="flex flex-col gap-3">
-            <h3 className="m-0 text-lg font-semibold">What a claimed account includes</h3>
-            <ul className="m-0 flex max-w-[820px] list-disc flex-col gap-2 pl-5 text-[15px] leading-relaxed text-muted">
-              {CLAIM_UNLOCKS.map((u) => (
-                <li key={u}>{u}</li>
-              ))}
-            </ul>
-            <p className="m-0 max-w-[820px] text-sm text-muted">
-              If another account has already claimed the hostname, the console shows an error and
-              the hostname stays in that account. Leave the file published and contact Polyguard
-              support; staff can move the hostname.
-            </p>
+          <div className="max-w-[520px]">
+            <ClaimLinkForm />
           </div>
         </div>
       </section>
