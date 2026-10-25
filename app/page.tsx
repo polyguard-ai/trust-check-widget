@@ -142,22 +142,22 @@ export default async function Home() {
       <section id="how" className="px-4 py-16 sm:px-6">
         <div className="mx-auto flex max-w-[1120px] flex-col gap-7">
           <h2 className="m-0 text-3xl font-bold">Three steps</h2>
-          <div className="grid gap-6 lg:grid-cols-[auto_minmax(0,1fr)_minmax(0,1.2fr)]">
+          <div className="grid gap-6 md:grid-cols-3">
             <div className="flex min-w-0 flex-col gap-3">
               <span className="text-[13px] font-semibold text-primary">1. Load the script</span>
-              <CodeBlock code={STEP_SCRIPT} lang="html" small />
+              <CodeBlock code={STEP_SCRIPT} lang="html" small wrap />
             </div>
             <div className="flex min-w-0 flex-col gap-3">
               <span className="text-[13px] font-semibold text-primary">
                 2. Place the widget in your form
               </span>
-              <CodeBlock code={STEP_DIV} lang="html" small />
+              <CodeBlock code={STEP_DIV} lang="html" small wrap />
             </div>
             <div className="flex min-w-0 flex-col gap-3">
               <span className="text-[13px] font-semibold text-primary">
                 3. Verify the result on your server
               </span>
-              <CodeBlock code={STEP_VERIFY} lang="http" small />
+              <CodeBlock code={STEP_VERIFY} lang="http" small wrap />
             </div>
           </div>
           <p className="m-0 text-sm text-muted">

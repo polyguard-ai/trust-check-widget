@@ -63,4 +63,11 @@
   .code-block.code-sm pre.shiki {
     font-size: 12px;
   }
+  /* Wraps instead of scrolling, and fills its grid cell so sibling boxes match. */
+  .code-block.code-wrap pre.shiki {
+    height: 100%;
+    overflow-x: hidden;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
 }
