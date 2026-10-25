@@ -1,11 +1,15 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import { CodeBlock } from '@/components/CodeBlock';
 import { CodeTabs, type CodeTab } from '@/components/CodeTabs';
+import { CopyPromptButton } from '@/components/CopyPromptButton';
+import { FlowDiagram } from '@/components/FlowDiagram';
+import { HeroTrustCheck } from '@/components/HeroTrustCheck';
 import { PhoneRequirements } from '@/components/PhoneRequirements';
-import { TrustCheckForm } from '@/components/TrustCheckForm';
-import { CDN_SCRIPT_URL, DOCS_URL, REPO_URL } from '@/lib/config';
+import { AGENT_PROMPT, CDN_SCRIPT_URL, DOCS_URL, LLMS_TXT_URL, REPO_URL } from '@/lib/config';
 import { EXAMPLES, exampleUrl, readExample } from '@/lib/examples';
 import { highlight } from '@/lib/highlight';
+import photo from '@/public/trust-check-in-use.webp';
 
 const STEP_SCRIPT = `<script
   src="${CDN_SCRIPT_URL}"
@@ -95,6 +99,11 @@ async function exampleTabs(): Promise<CodeTab[]> {
   );
 }
 
+const BUTTON_PRIMARY =
+  'inline-flex h-[46px] items-center rounded-md bg-primary px-5 font-semibold text-white no-underline hover:bg-primary-strong hover:text-white';
+const BUTTON_SECONDARY =
+  'inline-flex h-[46px] items-center rounded-md border border-line-strong bg-white px-5 font-semibold text-ink no-underline hover:text-ink';
+
 export default async function Home() {
   const tabs = await exampleTabs();
 
@@ -107,26 +116,22 @@ export default async function Home() {
               Free · no account required · 1,000 Trust Checks a week
             </span>
             <h1 className="m-0 text-4xl leading-[1.1] font-bold tracking-[-0.02em] md:text-[46px]">
-              The only modern way to be sure an agent didn&apos;t fill in your form.
+              The only way to be sure an agent didn&apos;t fill in your form.
             </h1>
             <p className="m-0 text-lg leading-normal text-muted">
-              reCAPTCHA and Turnstile score the browser, and a browser driven by a language model
-              passes. A Polyguard Trust Check replaces the checkbox. The visitor confirms with their
-              phone in a few seconds, and your server verifies the result with one request. You add
-              one script tag and one div.
+              reCAPTCHA and Turnstile score the browser, and an agent driving a browser passes. A
+              Polyguard Trust Check replaces the checkbox. The visitor confirms with their phone in
+              a few seconds, and your server verifies the result with one request. You add one
+              script tag and one div.
             </p>
             <div className="flex flex-wrap gap-3">
-              <a
-                href="#demo"
-                className="inline-flex h-[46px] items-center rounded-md bg-primary px-5 font-semibold text-white no-underline hover:bg-primary-strong hover:text-white"
-              >
-                Try it on this page
-              </a>
-              <a
-                href="#how"
-                className="inline-flex h-[46px] items-center rounded-md border border-line-strong bg-white px-5 font-semibold text-ink no-underline hover:text-ink"
-              >
-                Read the three steps
+              <CopyPromptButton
+                text={AGENT_PROMPT}
+                label="Copy setup prompt for your agent"
+                className={BUTTON_PRIMARY}
+              />
+              <a href="#how" className={BUTTON_SECONDARY}>
+                How it works
               </a>
             </div>
             <p className="m-0 text-[13px] text-muted">
@@ -134,14 +139,47 @@ export default async function Home() {
             </p>
           </div>
           <div className="min-w-0 flex-[0_1_420px]">
-            <TrustCheckForm id="demo" />
+            <HeroTrustCheck />
           </div>
         </div>
       </section>
 
-      <section id="how" className="px-4 py-16 sm:px-6">
+      <section id="how" className="px-4 py-16 sm:px-6" aria-labelledby="how-title">
+        <div className="mx-auto flex max-w-[1120px] flex-col gap-8">
+          <h2 id="how-title" className="m-0 text-3xl font-bold">
+            How it works
+          </h2>
+          <FlowDiagram />
+          <div className="flex flex-wrap items-center gap-10">
+            <Image
+              src={photo}
+              alt="A person holding a phone up to a laptop screen that shows a Trust Check code."
+              className="h-auto w-full max-w-[300px] flex-[0_0_auto] rounded-xl"
+              sizes="(max-width: 640px) 100vw, 300px"
+            />
+            <div className="flex min-w-0 flex-[1_1_420px] flex-col gap-3 text-[15px] leading-relaxed text-muted">
+              <p className="m-0">
+                The visitor clicks the box, and the widget displays a code that changes rapidly.
+                They hold their phone camera up to the screen for a few seconds. An iPhone runs the
+                check in an App Clip and an Android phone in the browser, so nothing has to be
+                installed.
+              </p>
+              <p className="m-0">
+                Polyguard checks that each capture came from the screen within the time a camera
+                needs and a relay cannot match, and that the phone passed hardware attestation. The
+                widget then writes the result into your form, and your server verifies it with one
+                POST.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="px-4 pb-16 sm:px-6" aria-labelledby="steps-title">
         <div className="mx-auto flex max-w-[1120px] flex-col gap-7">
-          <h2 className="m-0 text-3xl font-bold">Three steps</h2>
+          <h2 id="steps-title" className="m-0 text-3xl font-bold">
+            Three steps
+          </h2>
           <div className="grid gap-6 md:grid-cols-3">
             <div className="flex min-w-0 flex-col gap-3">
               <span className="text-[13px] font-semibold text-primary">1. Load the script</span>
@@ -162,18 +200,62 @@ export default async function Home() {
           </div>
           <p className="m-0 text-sm text-muted">
             Your server compares <span className="font-mono">hostname</span> with its own, as with
-            reCAPTCHA or Turnstile. Polyguard accepts each result once, within 300 seconds of the
-            Trust Check.
+            reCAPTCHA or Turnstile.
           </p>
+        </div>
+      </section>
+
+      <section className="px-4 pb-16 sm:px-6" aria-labelledby="instructions-title">
+        <div className="mx-auto grid max-w-[1120px] gap-6 md:grid-cols-2">
+          <h2 id="instructions-title" className="sr-only">
+            Instructions for people and for agents
+          </h2>
+          <div className="flex min-w-0 flex-col gap-3 rounded-xl border border-line bg-surface p-6">
+            <h3 className="m-0 text-lg font-semibold">If you are a person</h3>
+            <p className="m-0 text-sm text-muted">
+              Copy this prompt and give it to your coding agent. It points at the instructions for
+              agents and names what to check on the server.
+            </p>
+            <pre className="m-0 rounded-lg border border-line bg-white p-4 font-mono text-xs leading-relaxed whitespace-pre-wrap text-ink">
+              {AGENT_PROMPT}
+            </pre>
+            <CopyPromptButton
+              text={AGENT_PROMPT}
+              label="Copy prompt"
+              className="inline-flex h-10 items-center self-start rounded-md bg-primary px-4 text-sm font-semibold text-white hover:bg-primary-strong"
+            />
+          </div>
+          <div className="flex min-w-0 flex-col gap-3 rounded-xl border border-line bg-surface p-6">
+            <h3 className="m-0 text-lg font-semibold">If you are an agent</h3>
+            <p className="m-0 text-sm text-muted">
+              Read <a href="/llms.txt">{LLMS_TXT_URL}</a>. It has the markup, the siteverify
+              contract, the rules to enforce, and one example file per stack: React, Next.js,
+              Express, plain HTML, Flask, PHP and WordPress.
+            </p>
+            <p className="m-0 text-sm text-muted">
+              Every example is a single file in{' '}
+              <a href={`${REPO_URL}/tree/main/examples`}>the examples directory</a>.
+            </p>
+          </div>
         </div>
       </section>
 
       <section className="px-4 pb-16 sm:px-6" aria-labelledby="examples-title">
         <div className="mx-auto flex max-w-[1120px] flex-col gap-4">
-          <h2 id="examples-title" className="m-0 text-2xl font-bold">
-            Server-side verification in your stack
-          </h2>
-          <CodeTabs tabs={tabs} />
+          <details className="group rounded-xl border border-line">
+            <summary className="cursor-pointer list-none px-6 py-4 text-lg font-semibold [&::-webkit-details-marker]:hidden">
+              <span id="examples-title">
+                Full examples for React, Next.js, Express, HTML, Flask and PHP
+              </span>
+              <span className="ml-2 text-sm font-normal text-muted group-open:hidden">Show</span>
+              <span className="ml-2 hidden text-sm font-normal text-muted group-open:inline">
+                Hide
+              </span>
+            </summary>
+            <div className="px-6 pb-6">
+              <CodeTabs tabs={tabs} />
+            </div>
+          </details>
         </div>
       </section>
 
@@ -272,8 +354,9 @@ export default async function Home() {
             <PhoneRequirements />
           </div>
           <p className="m-0 pt-2 text-sm text-muted">
-            More in the <a href={DOCS_URL}>Polyguard SDK docs</a>. The source for this site and
-            every example is on <a href={REPO_URL}>GitHub</a> under the MIT license.
+            A contact form gated by the widget is on the <Link href="/demo">demo page</Link>. More
+            in the <a href={DOCS_URL}>Polyguard SDK docs</a>. The source for this site and every
+            example is on <a href={REPO_URL}>GitHub</a> under the MIT license.
           </p>
         </div>
       </section>

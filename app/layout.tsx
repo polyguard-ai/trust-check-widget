@@ -25,9 +25,9 @@ export const metadata: Metadata = {
     template: '%s | postcaptcha',
   },
   description:
-    'The only modern way to be sure an agent did not fill in your form. A keyless, drop-in replacement for reCAPTCHA and Turnstile, verified on your server with one request.',
+    'The only way to be sure an agent did not fill in your form. A keyless, drop-in replacement for reCAPTCHA and Turnstile, verified on your server with one request.',
   openGraph: {
-    title: "The only modern way to be sure an agent didn't fill in your form.",
+    title: "The only way to be sure an agent didn't fill in your form.",
     description:
       'A keyless Polyguard Trust Check replaces reCAPTCHA or Turnstile. Free for 1,000 Trust Checks a week, no account required.',
     url: 'https://postcaptcha.com',

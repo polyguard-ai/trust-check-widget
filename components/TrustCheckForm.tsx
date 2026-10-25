@@ -2,37 +2,15 @@
 
 import { useEffect, useRef, useState, type FormEvent } from 'react';
 import { API_SERVER, TRUST_CHECK_SCRIPT_URL } from '@/lib/config';
-
-type TrustCheckApi = {
-  render: (container: HTMLElement, options: Record<string, unknown>) => string;
-  reset: (id?: string) => void;
-  remove: (id?: string) => void;
-};
-
-type LoaderWindow = Window & {
-  Polyguard?: { TrustCheck?: TrustCheckApi };
-  __pgTrustCheckLoaded?: boolean;
-  __pgTrustCheckQueue?: Array<() => void>;
-};
+import {
+  isVerified,
+  submitTrustCheck,
+  trustCheckApi,
+  whenTrustCheckLoaded,
+  type SubmitResult,
+} from '@/lib/trust-check-loader';
 
 const LOAD_TIMEOUT_MS = 10_000;
-
-/** Runs `fn` once the layout's trust-check.js has called its onload callback. */
-function whenLoaded(fn: () => void): () => void {
-  const w = window as LoaderWindow;
-  if (w.__pgTrustCheckLoaded && w.Polyguard?.TrustCheck) {
-    fn();
-    return () => {};
-  }
-  const queue = (w.__pgTrustCheckQueue ||= []);
-  queue.push(fn);
-  return () => {
-    const i = queue.indexOf(fn);
-    if (i !== -1) queue.splice(i, 1);
-  };
-}
-
-type SubmitResult = { status: number; body: unknown };
 
 export function TrustCheckForm({ id = 'demo' }: { id?: string }) {
   const container = useRef<HTMLDivElement>(null);
@@ -48,8 +26,8 @@ export function TrustCheckForm({ id = 'demo' }: { id?: string }) {
     const timer = setTimeout(() => {
       if (!rendered) setScriptMissing(true);
     }, LOAD_TIMEOUT_MS);
-    const cancel = whenLoaded(() => {
-      const api = (window as LoaderWindow).Polyguard?.TrustCheck;
+    const cancel = whenTrustCheckLoaded(() => {
+      const api = trustCheckApi();
       if (!api || !container.current) return;
       rendered = true;
       setScriptMissing(false);
@@ -72,8 +50,7 @@ export function TrustCheckForm({ id = 'demo' }: { id?: string }) {
     return () => {
       clearTimeout(timer);
       cancel();
-      if (widgetId.current)
-        (window as LoaderWindow).Polyguard?.TrustCheck?.remove(widgetId.current);
+      if (widgetId.current) trustCheckApi()?.remove(widgetId.current);
       widgetId.current = null;
     };
   }, []);
@@ -83,32 +60,16 @@ export function TrustCheckForm({ id = 'demo' }: { id?: string }) {
     if (!response) return;
     setSending(true);
     try {
-      const res = await fetch('/api/submit', {
-        method: 'POST',
-        body: new FormData(event.currentTarget),
-      });
-      let body: unknown;
-      try {
-        body = await res.json();
-      } catch {
-        body = { error: 'non_json_response' };
-      }
-      setResult({ status: res.status, body });
-    } catch {
-      setResult({ status: 0, body: { error: 'network_error' } });
+      setResult(await submitTrustCheck(new FormData(event.currentTarget)));
     } finally {
       setSending(false);
       // A response verifies once, so the next send needs a new Trust Check.
-      if (widgetId.current) (window as LoaderWindow).Polyguard?.TrustCheck?.reset(widgetId.current);
+      if (widgetId.current) trustCheckApi()?.reset(widgetId.current);
       setResponse('');
     }
   }
 
-  const verified =
-    !!result &&
-    typeof result.body === 'object' &&
-    result.body !== null &&
-    (result.body as { verified?: unknown }).verified === true;
+  const verified = isVerified(result);
 
   return (
     <form

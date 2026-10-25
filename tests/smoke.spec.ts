@@ -44,33 +44,65 @@ const FAKE_WIDGET = `
 })();
 `;
 
+const VERIFIED = {
+  verified: true,
+  hostname_matched: true,
+  expected_hostname: ['localhost'],
+  siteverify: { success: true, hostname: 'localhost', score: 'PASS', 'error-codes': [] },
+};
+
 async function mockWidget(page: Page) {
   await page.route(/trust-check\.js/, (route) =>
     route.fulfill({ contentType: 'application/javascript', body: FAKE_WIDGET }),
   );
 }
 
-test('landing page demo form submits after the Trust Check callback', async ({ page }) => {
+test('landing page shows the siteverify result after the Trust Check callback', async ({
+  page,
+}) => {
   await mockWidget(page);
   let posted: string | null = null;
   await page.route('**/api/submit', async (route) => {
     posted = route.request().postData();
-    await route.fulfill({
-      json: {
-        verified: true,
-        hostname_matched: true,
-        expected_hostname: ['localhost'],
-        siteverify: { success: true, hostname: 'localhost', score: 'PASS', 'error-codes': [] },
-      },
-    });
+    await route.fulfill({ json: VERIFIED });
   });
 
   await page.goto('/');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText(
-    "The only modern way to be sure an agent didn't fill in your form.",
+    "The only way to be sure an agent didn't fill in your form.",
   );
 
-  const form = page.locator('form#demo');
+  const hero = page.locator('#demo');
+  const container = hero.locator('.pg-trust-check');
+  await expect(container).toHaveCount(1);
+  await expect(hero.getByTestId('submit-result')).toHaveCount(0);
+
+  await container.getByRole('button', { name: 'Mock Trust Check' }).click();
+  await expect(hero.getByTestId('submit-outcome')).toContainText('Verified');
+  await expect(hero.getByTestId('submit-result')).toContainText('"score": "PASS"');
+  expect(posted).toContain(SESSION);
+});
+
+test('landing page links the agent instructions', async ({ page, request }) => {
+  await mockWidget(page);
+  await page.goto('/');
+  await expect(
+    page.getByRole('button', { name: 'Copy setup prompt for your agent' }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole('link', { name: 'https://postcaptcha.com/llms.txt' }),
+  ).toHaveAttribute('href', '/llms.txt');
+  const res = await request.get('/llms.txt');
+  expect(res.status()).toBe(200);
+  expect(await res.text()).toContain('/v2/siteverify');
+});
+
+test('demo form submits only after the Trust Check callback', async ({ page }) => {
+  await mockWidget(page);
+  await page.route('**/api/submit', (route) => route.fulfill({ json: VERIFIED }));
+
+  await page.goto('/demo');
+  const form = page.locator('form#contact');
   const container = form.locator('.pg-trust-check');
   await expect(container).toHaveCount(1);
 
@@ -84,15 +116,11 @@ test('landing page demo form submits after the Trust Check callback', async ({ p
 
   await send.click();
   await expect(form.getByTestId('submit-outcome')).toContainText('Verified');
-  await expect(form.getByTestId('submit-result')).toContainText('"score": "PASS"');
-  expect(posted).toContain('pg-trust-check-response');
-  expect(posted).toContain(SESSION);
-
   // The response verifies once, so Send is disabled again.
   await expect(send).toBeDisabled();
 });
 
-for (const path of ['/demo', '/migrate/recaptcha', '/migrate/turnstile', '/claim']) {
+for (const path of ['/migrate/recaptcha', '/migrate/turnstile', '/claim']) {
   test(`${path} renders`, async ({ page }) => {
     await mockWidget(page);
     const res = await page.goto(path);
