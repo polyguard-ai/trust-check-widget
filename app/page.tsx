@@ -1,10 +1,10 @@
 import Image from 'next/image';
-import { ClaimLinkForm } from '@/components/ClaimLinkForm';
+
 import { CopyPromptButton } from '@/components/CopyPromptButton';
 import { FlowLane, ONE_DEVICE, TWO_DEVICES } from '@/components/FlowDiagram';
 import { HeroTrustCheck } from '@/components/HeroTrustCheck';
 import { MigrationSteps } from '@/components/MigrationSteps';
-import { AGENT_PROMPT, DOCS_URL, LLMS_TXT_URL, REPO_URL } from '@/lib/config';
+import { AGENT_PROMPT, CONSOLE_CLAIM_URL, DOCS_URL, LLMS_TXT_URL, REPO_URL } from '@/lib/config';
 import { DIFFERENCES, RECAPTCHA, TURNSTILE } from '@/lib/migrations';
 import oneDevice from '@/public/one-device.webp';
 import photo from '@/public/trust-check-in-use.webp';
@@ -42,7 +42,7 @@ const CLAIM_REASONS = [
 const FAQ = [
   {
     q: 'What happens at 1,000 checks?',
-    a: 'The widget shows "Unavailable this week" on every page in the account until Monday 00:00 UTC. Claim your website and contact us to raise the limit.',
+    a: 'The widget shows "Unavailable this week" on every page in the account until Monday 00:00 UTC. Claim your website and you can raise the limit.',
   },
   {
     q: 'Do I need a secret key?',
@@ -92,10 +92,10 @@ export default function Home() {
               The only way to be sure an agent didn&apos;t fill in your form.
             </h1>
             <p className="m-0 text-lg leading-normal text-muted">
-              reCAPTCHA and Turnstile score the browser, and an agent driving a browser passes. A
-              Polyguard Trust Check replaces the checkbox. The visitor confirms with their phone in
-              a few seconds, and your server verifies the result with one request. You add one
-              script tag and one div.
+              A CAPTCHA asks your visitor to solve a puzzle, and AI agents solve puzzles. A
+              Polyguard Trust Check asks for something an agent cannot do: hold a phone up to the
+              screen. If you use reCAPTCHA or Turnstile today, you change the script URL and one
+              server call.
             </p>
             <div className="flex flex-wrap gap-3">
               <CopyPromptButton
@@ -258,6 +258,7 @@ export default function Home() {
               it, sign in to the console and claim your website by publishing a verification file.
             </p>
           </div>
+          <h3 className="m-0 text-xl font-semibold">Why would I create an account?</h3>
           <div className="grid gap-6 md:grid-cols-3">
             {CLAIM_REASONS.map((r) => (
               <div
@@ -269,9 +270,10 @@ export default function Home() {
               </div>
             ))}
           </div>
-          <div className="max-w-[520px]">
-            <ClaimLinkForm />
-          </div>
+          <p className="m-0 max-w-[820px] text-[15px] text-muted">
+            Once postcaptcha is running on your website, claim it at{' '}
+            <a href={CONSOLE_CLAIM_URL}>console.polyguard.ai</a>.
+          </p>
         </div>
       </section>
 

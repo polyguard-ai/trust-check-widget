@@ -104,7 +104,7 @@ export function HeroTrustCheck() {
           data-testid="submit-placeholder"
           className="flex min-h-[120px] items-center justify-center rounded-lg border border-dashed border-line-strong bg-surface p-4 text-center font-mono text-xs text-muted"
         >
-          The JSON our server receives from /v2/siteverify appears here.
+          The JSON results from this Trust Check will appear here.
         </div>
       )}
 
