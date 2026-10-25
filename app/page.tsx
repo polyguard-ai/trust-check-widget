@@ -149,11 +149,6 @@ export default function Home() {
               </div>
             </div>
           </div>
-          <p className="m-0 max-w-[820px] text-[15px] leading-relaxed text-muted">
-            A traditional CAPTCHA is a puzzle, and LLMs solve puzzles now. Postcaptcha uses
-            Polyguard Trust Checks instead, which confirm physical things: a real phone, held up to
-            the screen by the person filling in your form.
-          </p>
         </div>
       </section>
 
