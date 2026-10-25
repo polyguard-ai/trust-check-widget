@@ -17,8 +17,8 @@ add_action('wp_enqueue_scripts', function () {
 });
 ```
 
-The login page does not run `wp_enqueue_scripts`; use `login_enqueue_scripts`
-for it.
+WordPress does not run `wp_enqueue_scripts` on the login page; use
+`login_enqueue_scripts` there.
 
 ## Place the widget
 
@@ -76,4 +76,4 @@ WP-CLI) or they will all fail.
 - Visitors need a phone. They do not need to install an app.
 - `home_url()` must match the hostname visitors load. `www.example.com` and
   `example.com` are different hostnames.
-- A response verifies once and expires after 300 seconds.
+- Polyguard accepts each response once. Responses expire after 300 seconds.

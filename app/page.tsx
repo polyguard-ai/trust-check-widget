@@ -36,15 +36,15 @@ const CLAIM_FILE = `{
 const WHY = [
   {
     title: 'Nothing for the agent to solve',
-    body: 'The page shows a code that a phone camera has to read from the screen. An agent running in a browser, headless or not, has no camera to point at the screen, so the Trust Check never completes and the form stays locked.',
+    body: 'The widget displays a code that a phone camera must read from the screen. An agent in a browser, headless or not, has no camera, so the Trust Check never completes and the submit button stays disabled.',
   },
   {
     title: 'Optical distance bounding',
-    body: 'The code changes rapidly while the phone holds on it for a few seconds, and PG-Presence requires each capture within about 100 milliseconds of the code appearing on the screen. A relayed screenshot, a remote desktop or a screen share adds delay the bound does not allow.',
+    body: 'The code changes rapidly while the visitor holds the phone camera on it for a few seconds. The Polyguard server accepts each capture only if it arrives within about 100 milliseconds of the code appearing on the screen. A screenshot relay, a remote desktop or a screen share adds more delay than that.',
   },
   {
     title: 'Hardware attestation',
-    body: 'Before a result counts, the phone proves it is a real device with hardware-backed attestation: Apple App Attest, Android key attestation or Google Play Integrity. A scripted browser or an emulator produces nothing your server will accept.',
+    body: 'Before a result counts, the Polyguard server checks a hardware attestation from the phone: Apple App Attest, Android key attestation or Google Play Integrity. A scripted browser or an emulator cannot produce one.',
   },
 ];
 
@@ -55,11 +55,11 @@ const FAQ = [
   },
   {
     q: 'Do I need a secret key?',
-    a: 'No. A result can be verified once and carries your hostname. After you claim the hostname you can require an API key on siteverify, or read the webhook instead.',
+    a: 'No. A result can be verified once, and the response includes the hostname of the page where the check ran. After you claim the hostname you can require an API key on siteverify, or receive results by webhook instead.',
   },
   {
     q: 'Do visitors need to install an app?',
-    a: 'They need a phone, not an app. iPhones complete the Trust Check in an App Clip, and Android phones in the browser. Visitors with Polyguard Mobile installed use it.',
+    a: 'They need a phone, not an app. On an iPhone the Trust Check runs in an App Clip; on Android it runs in the browser. If Polyguard Mobile is installed, the check runs there.',
   },
   {
     q: 'Does this work on localhost?',
@@ -67,7 +67,7 @@ const FAQ = [
   },
   {
     q: 'What does my server learn about the visitor?',
-    a: 'Keyless mode requests PG-Presence only. The siteverify response carries the hostname, action, cdata, a presence score and timestamps. It has no name, email address or phone number, and none is asked of the visitor.',
+    a: 'In keyless mode the only proof is PG-Presence. The siteverify response contains the hostname, action, cdata, a presence score and timestamps. It contains no name, email address or phone number, and the visitor is not asked for any.',
   },
   {
     q: 'Can I ask for more than presence?',
@@ -75,11 +75,11 @@ const FAQ = [
   },
   {
     q: 'My pages have dynamic paths. Is that a problem?',
-    a: 'Each page path gets its own link in your account. For paths like /post/12345, set data-path="/post" so those pages share one.',
+    a: 'Polyguard creates one link per page path in your account. For paths like /post/12345, set data-path="/post" so those pages share one link.',
   },
   {
     q: 'Can a failed presence score fail the check?',
-    a: 'Set data-scored="true". The default reports the score in the siteverify response without failing the check, which keeps the Android browser path open.',
+    a: 'Set data-scored="true". By default the score appears in the siteverify response and does not fail the check, so the Android browser path stays available.',
   },
 ];
 
@@ -110,10 +110,10 @@ export default async function Home() {
               The only modern way to be sure an agent didn&apos;t fill in your form.
             </h1>
             <p className="m-0 text-lg leading-normal text-muted">
-              reCAPTCHA and Turnstile score a browser, and browsers run by language models pass. A
-              Polyguard Trust Check replaces the checkbox: the visitor confirms with their phone in
-              a few seconds, and your server verifies the result with one request. Two lines of
-              HTML.
+              reCAPTCHA and Turnstile score the browser, and a browser driven by a language model
+              passes. A Polyguard Trust Check replaces the checkbox. The visitor confirms with their
+              phone in a few seconds, and your server verifies the result with one request. You add
+              one script tag and one div.
             </p>
             <div className="flex flex-wrap gap-3">
               <a
@@ -162,8 +162,8 @@ export default async function Home() {
           </div>
           <p className="m-0 text-sm text-muted">
             Your server compares <span className="font-mono">hostname</span> with its own, as with
-            reCAPTCHA or Turnstile. A result can be verified once, within 300 seconds of the Trust
-            Check.
+            reCAPTCHA or Turnstile. Polyguard accepts each result once, within 300 seconds of the
+            Trust Check.
           </p>
         </div>
       </section>
@@ -183,9 +183,9 @@ export default async function Home() {
             Why an AI agent cannot submit your form
           </h2>
           <p className="m-0 max-w-[760px] text-base leading-relaxed text-on-dark">
-            A CAPTCHA hands the browser a puzzle, and browsers driven by language models now solve
-            puzzles. PG-Presence asks for something a browser cannot produce: a physical phone in
-            front of the screen.
+            A CAPTCHA is a puzzle for the browser to solve, and a browser driven by a language model
+            solves it. PG-Presence requires a phone in front of the screen, and a browser cannot
+            produce one.
           </p>
           <div className="grid gap-6 md:grid-cols-3">
             {WHY.map((item) => (
@@ -203,10 +203,10 @@ export default async function Home() {
           <div className="flex min-w-0 flex-[1_1_420px] flex-col gap-3.5">
             <h2 className="m-0 text-3xl font-bold">Your site, your account</h2>
             <p className="m-0 text-[15px] leading-relaxed text-muted">
-              The first Trust Check from a new hostname creates an account and a Custom app for that
-              hostname. The account gets 1,000 Trust Checks per week, shared by every hostname and
-              page you add to it. To manage it, sign in to the console and claim the hostname by
-              publishing one file.
+              When a Trust Check runs from a hostname for the first time, Polyguard creates an
+              account and a Custom app for that hostname. The account is limited to 1,000 Trust
+              Checks per week across every hostname and page in it. To manage the account, sign in
+              to the console and claim the hostname by publishing one file.
             </p>
             <Link
               href="/claim"
@@ -221,8 +221,8 @@ export default async function Home() {
             </span>
             <CodeBlock code={CLAIM_FILE} lang="json" />
             <p className="m-0 text-[13px] text-muted">
-              Serve it over https without a redirect. One file covers every hostname that points at
-              your origin, each with its own token. A hostname belongs to one account.
+              Serve it over https without a redirect. One file can list every hostname that points
+              at your origin, each with its own token. A hostname belongs to one account.
             </p>
           </div>
         </div>
@@ -233,7 +233,7 @@ export default async function Home() {
           <div className="flex min-w-0 flex-col gap-1.5">
             <h2 className="m-0 text-[22px] font-bold">Coming from reCAPTCHA or Turnstile?</h2>
             <p className="m-0 text-sm text-muted">
-              Side-by-side diffs: one script URL, one class name, one hidden field, one endpoint.
+              Side-by-side diffs of the script URL, class name, hidden field and endpoint.
             </p>
           </div>
           <div className="flex flex-wrap gap-3">

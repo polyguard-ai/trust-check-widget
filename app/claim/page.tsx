@@ -30,8 +30,8 @@ const UNLOCKS = [
 ];
 
 const RULES = [
-  'Serve the file at exactly /.well-known/polyguard.json over https. Redirects are not followed.',
-  'Any content type works; the body must be a JSON object under 16 KiB.',
+  'Serve the file at exactly /.well-known/polyguard.json over https. Polyguard does not follow redirects.',
+  'Any content type is accepted. The body must be a JSON object under 16 KiB.',
   'Each hostname is claimed separately. www.example.com and example.com are different hostnames, each with its own entry and token.',
   'A value can be a list of tokens, so two people in one organization can start a claim at the same time. A hostname still belongs to one account.',
   'Claim tokens expire after 7 days. The file is not needed once the claim succeeds.',
@@ -47,9 +47,10 @@ export default function ClaimPage() {
             Claim your site
           </h1>
           <p className="m-0 text-lg leading-normal text-muted">
-            The first Trust Check from a new hostname creates an account and a Custom app for it,
-            with 1,000 Trust Checks a week shared across everything in the account. Claiming moves
-            that account to you. You prove control of the hostname by publishing one file.
+            When a Trust Check runs from a hostname for the first time, Polyguard creates an account
+            and a Custom app for it, limited to 1,000 Trust Checks a week across everything in the
+            account. When you claim the hostname, Polyguard transfers that account to you. You prove
+            control of the hostname by publishing one file.
           </p>
         </header>
 
@@ -60,17 +61,18 @@ export default function ClaimPage() {
             </h2>
             <ol className="m-0 flex list-decimal flex-col gap-3 pl-5 text-[15px] leading-relaxed text-muted">
               <li>
-                Sign in to the Polyguard console (with a Trust Check) and open Settings, Websites.
-                Enter the hostname and start the claim. The link below fills it in for you.
+                Sign in to the Polyguard console (sign-in is itself a Trust Check) and open
+                Settings, then Websites. Enter the hostname and start the claim. The form below
+                builds a console link with the hostname filled in.
               </li>
               <li>
                 Publish the file the console shows at{' '}
                 <span className="font-mono">https://your-hostname/.well-known/polyguard.json</span>.
               </li>
               <li>
-                Click Verify. Polyguard fetches the file, and when the token matches, the app and
-                its links appear in your account. If you already have an account, the
-                hostname&apos;s account is merged into it.
+                Click Verify. Polyguard fetches the file and, if the token matches, moves the app
+                and its links into your account. If you already have an account, Polyguard merges
+                the hostname&apos;s account into it.
               </li>
             </ol>
             <ClaimLinkForm />
@@ -81,7 +83,7 @@ export default function ClaimPage() {
             </span>
             <CodeBlock code={ONE_HOST} lang="json" />
             <p className="m-0 text-[13px] text-muted">
-              This site publishes its own at{' '}
+              This site serves its own file at{' '}
               <a href="/.well-known/polyguard.json" className="font-mono">
                 /.well-known/polyguard.json
               </a>
@@ -111,7 +113,7 @@ export default function ClaimPage() {
 
         <section className="flex flex-col gap-4" aria-labelledby="unlocks-title">
           <h2 id="unlocks-title" className="m-0 text-2xl font-bold">
-            What claiming gives you
+            What a claimed account includes
           </h2>
           <ul className="m-0 flex max-w-[820px] list-disc flex-col gap-2 pl-5 text-[15px] leading-relaxed text-muted">
             {UNLOCKS.map((u) => (
@@ -119,9 +121,9 @@ export default function ClaimPage() {
             ))}
           </ul>
           <p className="m-0 max-w-[820px] text-sm text-muted">
-            If another account has already claimed the hostname, verification returns an error and
-            the hostname stays where it is. Contact Polyguard support with the published file in
-            place and staff can move it.
+            If another account has already claimed the hostname, the console shows an error and the
+            hostname stays in that account. Leave the file published and contact Polyguard support;
+            staff can move the hostname.
           </p>
         </section>
       </div>

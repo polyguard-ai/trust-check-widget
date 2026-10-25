@@ -16,7 +16,7 @@ export function SignupForm() {
       body: new FormData(event.currentTarget),
     });
     setStatus(res.ok ? 'done' : 'failed');
-    // A response verifies once; a second submission needs a new Trust Check.
+    // Polyguard accepts a response once; a second submission needs a new Trust Check.
     reset();
   }
 

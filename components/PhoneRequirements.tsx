@@ -2,19 +2,19 @@ const ROWS = [
   {
     phone: 'iPhone',
     without:
-      'The hand-off page offers the App Clip in Safari. It completes the Trust Check with device attestation.',
-    with: 'Opens Polyguard Mobile.',
+      'The hand-off page in Safari links to the App Clip, which runs the Trust Check with device attestation.',
+    with: 'The hand-off page opens Polyguard Mobile.',
   },
   {
     phone: 'Android',
     without:
-      'The hand-off page runs a browser check with Android key attestation. Presence is reported as OFFLINE and does not fail the check.',
-    with: 'Opens Polyguard Mobile.',
+      'The hand-off page runs a browser check with Android key attestation. The presence score is reported as OFFLINE and does not fail the check.',
+    with: 'The hand-off page opens Polyguard Mobile.',
   },
   {
     phone: 'Desktop',
     without: 'The visitor scans the code with their phone and continues as above.',
-    with: 'Same.',
+    with: 'Same as above.',
   },
 ];
 

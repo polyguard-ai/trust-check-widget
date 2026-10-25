@@ -20,8 +20,8 @@ export function MigrationGuide({ migration: m }: { migration: Migration }) {
           </h1>
           <p className="m-0 max-w-[760px] text-lg leading-normal text-muted">
             Change one script URL, one class name, one hidden field name and one server call. Your
-            server keeps comparing <span className="font-mono">hostname</span>, as {m.name} already
-            asks you to.
+            server keeps comparing <span className="font-mono">hostname</span>, as the {m.name}{' '}
+            documentation already instructs.
           </p>
           <p className="m-0 text-sm">
             <Link href={other.href}>{other.label}</Link>

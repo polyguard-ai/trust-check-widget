@@ -35,11 +35,11 @@ if (!result.success || result.hostname !== 'www.example.com') {
 }`;
 
 const SHARED_DIFFERENCES = [
-  'No site key or account is needed to start. The first Trust Check from your hostname creates the account.',
-  'secret is optional. After you claim the hostname, send the App API key as secret, and require it from the Advanced tab if you want.',
-  'remoteip is compared with the address that started the Trust Check and reported as remoteip_matched. It never changes success, because mobile carriers and corporate egress change addresses between the click and the form post.',
-  'A result verifies once, within 300 seconds of completion. A second call returns timeout-or-duplicate.',
-  'The response adds app_id, link_uuid, link_session_id, action, cdata and score.',
+  'No site key or account is needed to start. Polyguard creates the account when the first Trust Check runs from your hostname.',
+  'secret is optional. After you claim the hostname, you can send the App API key as secret and, on the app’s Advanced tab, make it required.',
+  'Polyguard compares remoteip with the address that requested the widget’s ticket and reports the result as remoteip_matched. A mismatch never changes success, because mobile carriers and corporate proxies can change a visitor’s address between the click and the form post.',
+  'Polyguard accepts each result once, within 300 seconds of completion. A second call returns timeout-or-duplicate.',
+  'The response also includes app_id, link_uuid, link_session_id, action, cdata and score.',
   'Visitors need a phone. They do not need to install an app.',
 ];
 
@@ -150,6 +150,6 @@ if (!result.success || result.hostname !== 'www.example.com') {
   serverAfter: SERVER_AFTER,
   differences: [
     ...SHARED_DIFFERENCES,
-    'Sizes match Turnstile: normal (300×65), compact (150×140) and flexible (full width, 65 tall).',
+    'The widget sizes are the same as Turnstile’s: normal (300×65), compact (150×140) and flexible (full width, 65 tall).',
   ],
 };
