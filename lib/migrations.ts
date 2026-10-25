@@ -13,7 +13,7 @@ export const DIFFERENCES = [
   'No site key or account is needed. Polyguard creates a free account when the first Trust Check runs from your website.',
   '`secret` is an optional parameter, since API keys cannot be created until you have set up a free account. You can make it required once that is done.',
   'Results are valid for 5 minutes, instead of 2 minutes for reCAPTCHA.',
-  '`remoteip` is reported as `remoteip_matched`; decide for yourself whether to fail on a mismatch. Turnstile fails on it.',
+  '`remoteip` is reported as `remoteip_matched`; decide for yourself whether to fail on a mismatch.',
 ];
 
 export const RECAPTCHA: Migration = {
