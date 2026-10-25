@@ -35,8 +35,8 @@ const CLAIM_FILE = `{
 
 const WHY = [
   {
-    title: 'Nothing for the agent to solve',
-    body: 'The widget displays a code that a phone camera must read from the screen. An agent in a browser, headless or not, has no camera, so the Trust Check never completes and the submit button stays disabled.',
+    title: 'Tests an action in the physical world',
+    body: 'The widget displays a code on the screen, and the visitor has to hold a phone camera up to that screen. No script in the browser or on the server stands in for that action. An agent in a browser, headless or not, has no camera, so the Trust Check never completes and the submit button stays disabled.',
   },
   {
     title: 'Optical distance bounding',
@@ -183,9 +183,9 @@ export default async function Home() {
             Why an AI agent cannot submit your form
           </h2>
           <p className="m-0 max-w-[760px] text-base leading-relaxed text-on-dark">
-            A CAPTCHA is a puzzle for the browser to solve, and a browser driven by a language model
-            solves it. PG-Presence requires a phone in front of the screen, and a browser cannot
-            produce one.
+            A CAPTCHA tests whether the visitor can solve a puzzle on the screen, and language
+            models solve those puzzles now. PG-Presence tests an action in the physical world: a
+            phone held up to the screen. A browser cannot perform it.
           </p>
           <div className="grid gap-6 md:grid-cols-3">
             {WHY.map((item) => (
