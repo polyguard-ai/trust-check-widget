@@ -73,6 +73,9 @@ second submission.
 - hCaptcha: also change `.h-captcha` to `.pg-trust-check` and read
   `pg-trust-check-response` instead of `h-captcha-response`.
 - Remove the old site key and secret from configuration.
+- WordPress: replace the reCAPTCHA, Turnstile or hCaptcha plugin with the
+  postcaptcha plugin:
+  https://github.com/polyguard-ai/trust-check-widget/tree/main/integrations/wordpress/postcaptcha
 
 ## After integrating
 

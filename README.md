@@ -70,6 +70,11 @@ Polyguard accepts each result once, within 300 seconds. `secret` is optional unt
 claim the hostname. Working versions for plain HTML, React, Next.js, Express,
 Flask, PHP and WordPress are in [`examples/`](./examples).
 
+For WordPress sites there is a plugin,
+[`integrations/wordpress/postcaptcha`](./integrations/wordpress/postcaptcha),
+that protects the login, registration, lost password and comment forms,
+WooCommerce, and Contact Form 7.
+
 Visitors need a phone. They do not need to install an app: on an iPhone the
 check runs in an App Clip, and on Android it runs in the browser.
 
@@ -188,6 +193,7 @@ and the smoke test on every push to `main` and every pull request.
 - `app/robots.ts`, `app/sitemap.ts`, and the JSON-LD in `app/page.tsx`: crawler and search metadata.
 - `skills/postcaptcha/SKILL.md`: an Agent Skill with the same instructions in short form.
 - `examples/`: copyable verification code, linked from the page.
+- `integrations/wordpress/`: the postcaptcha WordPress plugin, with its phpcs and wp-env setup.
 - `lib/`: config (including the agent prompt), siteverify helpers, migration tables, positioning lint.
 - `scripts/fetch-widget.sh`: local widget build.
 - `tests/`: Playwright smoke test, with the widget script and `/api/submit` mocked.
@@ -196,4 +202,6 @@ and the smoke test on every push to `main` and every pull request.
 
 ## License
 
-MIT. See [LICENSE](./LICENSE).
+MIT. See [LICENSE](./LICENSE). The WordPress plugin in
+`integrations/wordpress/postcaptcha/` is licensed GPL-2.0-or-later, as the
+wordpress.org plugin directory requires.

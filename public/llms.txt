@@ -190,7 +190,8 @@ inline.
 - [Express middleware](https://raw.githubusercontent.com/polyguard-ai/trust-check-widget/main/examples/express/middleware.js): `requireTrustCheck({ expectedHostname })`.
 - [Flask decorator](https://raw.githubusercontent.com/polyguard-ai/trust-check-widget/main/examples/python-flask/verify.py): `@require_trust_check()`, standard library only.
 - [PHP](https://raw.githubusercontent.com/polyguard-ai/trust-check-widget/main/examples/php/verify.php): `polyguard_siteverify()` with curl.
-- [WordPress notes](https://raw.githubusercontent.com/polyguard-ai/trust-check-widget/main/examples/wordpress/README.md): login, registration and comment hooks.
+- [WordPress plugin](https://github.com/polyguard-ai/trust-check-widget/tree/main/integrations/wordpress/postcaptcha): postcaptcha, for login, registration, lost password, comments, WooCommerce and Contact Form 7. Install it instead of editing the theme.
+- [WordPress notes](https://raw.githubusercontent.com/polyguard-ai/trust-check-widget/main/examples/wordpress/README.md): login, registration and comment hooks, for a theme or a custom form.
 
 Any other stack (Django, Rails, Laravel, Go, ASP.NET, SvelteKit, Remix, Nuxt):
 do Step 1 in the template or component and Step 2 in the form handler with

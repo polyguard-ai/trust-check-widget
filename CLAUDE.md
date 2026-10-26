@@ -49,6 +49,13 @@ integration instructions and is linked from `AGENT_PROMPT` in
 `app/page.tsx` (built from `FAQ`) are the crawler metadata. The TypeScript
 examples are typechecked and linted with the site.
 
+## WordPress plugin
+
+`integrations/wordpress/postcaptcha/` is the wordpress.org plugin (GPL-2.0-or-later;
+the rest of the repo is MIT). `integrations/wordpress/README.md` has the phpcs and
+wp-env commands. `pnpm lint:positioning` also scans `integrations/`, including
+`readme.txt`.
+
 ## Commands
 
 ```bash

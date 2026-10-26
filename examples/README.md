@@ -12,7 +12,7 @@ Each example sends the widget's `pg-trust-check-response` value to
 | `express/` | Express middleware, `requireTrustCheck({ expectedHostname })`. |
 | `python-flask/` | A Flask decorator, `@require_trust_check()`, using only the standard library for the HTTP call. |
 | `php/` | `polyguard_siteverify()` with curl, and a form handler. |
-| `wordpress/` | Notes only: where the script, the widget and the check go. |
+| `wordpress/` | Notes on where the script, the widget and the check go. The plugin is in [`integrations/wordpress/postcaptcha`](../integrations/wordpress/postcaptcha). |
 
 In every example `secret` is optional. Once your hostname is claimed you can
 send the App API key from the console as `secret`, and require it from the

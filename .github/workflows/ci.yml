@@ -50,3 +50,26 @@ jobs:
           name: playwright-report
           path: playwright-report/
           retention-days: 7
+
+  wordpress-plugin:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: integrations/wordpress
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+          tools: composer:v2
+
+      - run: composer install --no-interaction --no-progress
+
+      - name: phpcs (WordPress Coding Standards)
+        run: composer lint
+
+      - name: PHP syntax, lowest supported version
+        run: |
+          docker run --rm -v "$PWD/postcaptcha":/src -w /src php:7.4-cli \
+            sh -c 'find . -name "*.php" -print0 | xargs -0 -n1 php -l'

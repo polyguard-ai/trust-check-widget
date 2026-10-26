@@ -44,3 +44,7 @@ playwright/.cache/
 
 # locally built widget (scripts/fetch-widget.sh)
 public/vendor/
+
+# WordPress plugin development (integrations/wordpress)
+integrations/wordpress/vendor/
+integrations/wordpress/.wp-env.override.json

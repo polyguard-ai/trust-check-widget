@@ -28,7 +28,8 @@ The CI workflow runs the same steps.
 ## Copy rules
 
 `pnpm lint:positioning` enforces these in `app/`, `components/`, `lib/`,
-`examples/`, `skills/`, `public/llms.txt`, `README.md` and this file:
+`examples/`, `integrations/`, `skills/`, `public/llms.txt`, `README.md` and
+this file:
 
 - Polyguard **verifies**, **confirms** and **prevents**. `FORBIDDEN` in `lib/positioning-lint.ts` lists the words to avoid.
 - "Polyguard" is one word. "Trust Check" has both words capitalized. "PG-Presence" is hyphenated. "Privacy First" is written exactly so.
