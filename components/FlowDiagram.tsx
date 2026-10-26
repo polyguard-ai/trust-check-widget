@@ -21,89 +21,61 @@ export const ONE_DEVICE: Lane = {
   ],
 };
 
-const W = 760;
-const BOX_W = 160;
-const GAP = 40;
-const BOX_H = 92;
-const LABEL_H = 26;
-
-/** One lane of the Trust Check flow: four boxes and three arrows. */
-export function FlowLane({ lane, id }: { lane: Lane; id: string }) {
-  const y = LABEL_H;
-  const label = lane.steps.map((s) => `${s.title}: ${s.body}`).join(' ');
-  return (
+function Arrow({ vertical }: { vertical: boolean }) {
+  return vertical ? (
     <svg
-      viewBox={`0 0 ${W} ${LABEL_H + BOX_H + 4}`}
-      role="img"
-      aria-label={`${lane.label}. ${label}`}
-      className="h-auto w-full"
-      fontFamily="var(--font-sans)"
+      viewBox="0 0 16 28"
+      aria-hidden="true"
+      className="absolute top-full left-1/2 h-7 w-4 -translate-x-1/2 lg:hidden"
     >
-      <defs>
-        <marker
-          id={`arrow-${id}`}
-          viewBox="0 0 10 10"
-          refX="9"
-          refY="5"
-          markerWidth="8"
-          markerHeight="8"
-          orient="auto"
-        >
-          <path d="M0,0 L10,5 L0,10 z" fill="var(--color-primary)" />
-        </marker>
-      </defs>
-      <text x={0} y={14} fontSize="13" fontWeight="600" fill="var(--color-muted)">
-        {lane.label}
-      </text>
-      {lane.steps.map((s, i) => {
-        const x = i * (BOX_W + GAP);
-        const dark = i === 2;
-        return (
-          <g key={s.title}>
-            <rect
-              x={x}
-              y={y}
-              width={BOX_W}
-              height={BOX_H}
-              rx="8"
-              fill={dark ? 'var(--color-primary)' : 'var(--color-surface)'}
-              stroke={dark ? 'var(--color-primary)' : 'var(--color-line-strong)'}
-            />
-            <text
-              x={x + 12}
-              y={y + 26}
-              fontSize="14"
-              fontWeight="600"
-              fill={dark ? '#ffffff' : 'var(--color-ink)'}
+      <path d="M8 4v15" stroke="var(--color-primary)" strokeWidth="2" />
+      <path d="M3 17l5 8 5-8z" fill="var(--color-primary)" />
+    </svg>
+  ) : (
+    <svg
+      viewBox="0 0 40 16"
+      aria-hidden="true"
+      className="absolute top-1/2 left-full hidden h-4 w-10 -translate-y-1/2 lg:block"
+    >
+      <path d="M4 8h23" stroke="var(--color-primary)" strokeWidth="2" />
+      <path d="M25 3l9 5-9 5z" fill="var(--color-primary)" />
+    </svg>
+  );
+}
+
+/** One lane of the Trust Check flow: four steps, stacked below lg and in a row above it. */
+export function FlowLane({ lane }: { lane: Lane }) {
+  return (
+    <figure className="m-0 flex flex-col gap-3">
+      <figcaption className="text-[13px] font-semibold text-muted">{lane.label}</figcaption>
+      <ol className="m-0 grid list-none gap-7 p-0 lg:grid-cols-4 lg:gap-10">
+        {lane.steps.map((s, i) => {
+          const dark = i === 2;
+          return (
+            <li
+              key={s.title}
+              className={`relative flex flex-col gap-1 rounded-lg border p-3 ${
+                dark ? 'border-primary bg-primary' : 'border-line-strong bg-surface'
+              }`}
             >
-              {s.title}
-            </text>
-            <foreignObject x={x + 12} y={y + 36} width={BOX_W - 24} height={BOX_H - 42}>
-              <p
-                style={{
-                  margin: 0,
-                  fontSize: 12,
-                  lineHeight: 1.4,
-                  color: dark ? 'var(--color-on-dark)' : 'var(--color-muted)',
-                }}
+              <span className={`text-sm font-semibold ${dark ? 'text-white' : 'text-ink'}`}>
+                {s.title}
+              </span>
+              <span
+                className={`text-[13px] leading-snug lg:text-xs ${dark ? 'text-on-dark' : 'text-muted'}`}
               >
                 {s.body}
-              </p>
-            </foreignObject>
-            {i < lane.steps.length - 1 && (
-              <line
-                x1={x + BOX_W + 4}
-                y1={y + BOX_H / 2}
-                x2={x + BOX_W + GAP - 4}
-                y2={y + BOX_H / 2}
-                stroke="var(--color-primary)"
-                strokeWidth="2"
-                markerEnd={`url(#arrow-${id})`}
-              />
-            )}
-          </g>
-        );
-      })}
-    </svg>
+              </span>
+              {i < lane.steps.length - 1 && (
+                <>
+                  <Arrow vertical />
+                  <Arrow vertical={false} />
+                </>
+              )}
+            </li>
+          );
+        })}
+      </ol>
+    </figure>
   );
 }
