@@ -26,7 +26,7 @@ The CI workflow runs the same steps.
 
 ## Copy rules
 
-`pnpm lint:positioning` enforces these in `app/`, `components/`, `lib/`,
+`pnpm lint:positioning` enforces these in `app/`, `components/`, `lib/`, `integrations/`,
 `examples/`, `README.md` and this file:
 
 - Polyguard **verifies**, **confirms** and **prevents**. `FORBIDDEN` in `lib/positioning-lint.ts` lists the words to avoid.

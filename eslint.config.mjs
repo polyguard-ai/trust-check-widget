@@ -16,6 +16,7 @@ const config = [
       'test-results/**',
       'playwright-report/**',
       'next-env.d.ts',
+      'integrations/wordpress/vendor/**',
     ],
   },
   {

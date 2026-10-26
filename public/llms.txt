@@ -135,7 +135,11 @@ form-handling code:
 - Plain HTML: https://raw.githubusercontent.com/polyguard-ai/trust-check-widget/main/examples/html/index.html
 - Flask decorator: https://raw.githubusercontent.com/polyguard-ai/trust-check-widget/main/examples/python-flask/verify.py
 - PHP: https://raw.githubusercontent.com/polyguard-ai/trust-check-widget/main/examples/php/verify.php
-- WordPress notes: https://raw.githubusercontent.com/polyguard-ai/trust-check-widget/main/examples/wordpress/README.md
+- WordPress: install the postcaptcha plugin, which covers login,
+  registration, lost password, comments, WooCommerce and Contact Form 7:
+  https://github.com/polyguard-ai/trust-check-widget/tree/main/integrations/wordpress/postcaptcha
+  For a theme or a custom form, follow the notes:
+  https://raw.githubusercontent.com/polyguard-ai/trust-check-widget/main/examples/wordpress/README.md
 
 Any other stack: do Step 1 in the template and Step 2 in the form handler with
 the language's HTTP client, following the rules above.

@@ -10,10 +10,10 @@ import { join, relative, resolve } from 'node:path';
 type Rule = { pattern: RegExp; message: string; allow?: string[] };
 
 const ROOT = resolve(__dirname, '..');
-const SCAN_DIRS = ['app', 'components', 'lib', 'examples'];
+const SCAN_DIRS = ['app', 'components', 'lib', 'examples', 'integrations'];
 const SCAN_FILES = ['README.md', 'CONTRIBUTING.md'];
 const SELF = resolve(__filename);
-const EXTENSIONS = new Set(['.ts', '.tsx', '.js', '.md', '.css', '.html', '.py', '.php']);
+const EXTENSIONS = new Set(['.ts', '.tsx', '.js', '.md', '.css', '.html', '.py', '.php', '.txt']);
 
 const FORBIDDEN: Rule[] = [
   {
@@ -75,7 +75,7 @@ const REQUIRED_IN_FILE: Record<string, RegExp[]> = {
 
 function walk(dir: string, files: string[] = []): string[] {
   for (const entry of readdirSync(dir)) {
-    if (entry.startsWith('.') || entry === 'node_modules') continue;
+    if (entry.startsWith('.') || entry === 'node_modules' || entry === 'vendor') continue;
     const full = join(dir, entry);
     const st = statSync(full);
     if (st.isDirectory()) walk(full, files);
