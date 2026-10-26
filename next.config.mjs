@@ -27,6 +27,14 @@ const nextConfig = {
           { key: 'Cache-Control', value: 'public, max-age=300' },
         ],
       },
+      {
+        source: '/:file(llms.txt|llms-full.txt)',
+        headers: [
+          { key: 'Content-Type', value: 'text/plain; charset=utf-8' },
+          { key: 'Access-Control-Allow-Origin', value: '*' },
+          { key: 'Cache-Control', value: 'public, max-age=3600' },
+        ],
+      },
     ];
   },
 };

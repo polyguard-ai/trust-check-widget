@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import localFont from 'next/font/local';
 import { SiteFooter } from '@/components/SiteFooter';
 import { SiteHeader } from '@/components/SiteHeader';
-import { ONLOAD_CALLBACK, explicitScriptUrl } from '@/lib/config';
+import { ONLOAD_CALLBACK, SITE_URL, explicitScriptUrl } from '@/lib/config';
 import './globals.css';
 
 const plexSans = localFont({
@@ -19,20 +19,39 @@ const robotoMono = localFont({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://postcaptcha.com'),
+  metadataBase: new URL(SITE_URL),
   title: {
     default: 'postcaptcha: replace your CAPTCHA with a Polyguard Trust Check',
     template: '%s | postcaptcha',
   },
   description:
     'The only way to be sure an agent did not fill in your form. A keyless, drop-in replacement for reCAPTCHA and Turnstile, verified on your server with one request.',
+  keywords: [
+    'CAPTCHA alternative',
+    'reCAPTCHA alternative',
+    'Turnstile alternative',
+    'hCaptcha alternative',
+    'block AI agents',
+    'sign-up form bot protection',
+    'Polyguard Trust Check',
+  ],
+  alternates: {
+    canonical: '/',
+    types: { 'text/plain': [{ url: '/llms.txt', title: 'Instructions for coding agents' }] },
+  },
   openGraph: {
     title: "The only way to be sure an agent didn't fill in your form.",
     description:
       'A keyless Polyguard Trust Check replaces reCAPTCHA or Turnstile. Free for 1,000 Trust Checks a week, no account required.',
-    url: 'https://postcaptcha.com',
+    url: SITE_URL,
     siteName: 'postcaptcha',
     type: 'website',
+  },
+  twitter: {
+    card: 'summary',
+    title: "The only way to be sure an agent didn't fill in your form.",
+    description:
+      'A keyless Polyguard Trust Check replaces reCAPTCHA or Turnstile. Free for 1,000 Trust Checks a week, no account required.',
   },
 };
 
