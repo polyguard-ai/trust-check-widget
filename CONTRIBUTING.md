@@ -22,12 +22,14 @@ The CI workflow runs the same steps.
    `remoteip` when you have it) to `https://api.polyguard.ai/v2/siteverify`
    with a timeout, then require `success === true` **and** compare `hostname`
    with the site's own hostname. Treat `secret` as optional.
-3. List it in `examples/README.md` and in the stack list in `public/llms.txt`.
+3. List it in `examples/README.md`, in the stack list in `public/llms.txt`,
+   and in `EXAMPLES` in `app/llms-full.txt/route.ts`.
 
 ## Copy rules
 
-`pnpm lint:positioning` enforces these in `app/`, `components/`, `lib/`, `integrations/`,
-`examples/`, `README.md` and this file:
+`pnpm lint:positioning` enforces these in `app/`, `components/`, `lib/`,
+`examples/`, `integrations/`, `skills/`, `public/llms.txt`, `README.md` and
+this file:
 
 - Polyguard **verifies**, **confirms** and **prevents**. `FORBIDDEN` in `lib/positioning-lint.ts` lists the words to avoid.
 - "Polyguard" is one word. "Trust Check" has both words capitalized. "PG-Presence" is hyphenated. "Privacy First" is written exactly so.

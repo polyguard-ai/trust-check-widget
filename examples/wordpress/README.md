@@ -2,7 +2,7 @@
 
 For login, registration, lost password, comment, WooCommerce and Contact
 Form 7 forms, install the postcaptcha plugin in
-[`integrations/wordpress/postcaptcha`](../../integrations/wordpress/postcaptcha).
+[`integrations/wordpress/postcaptcha`](https://github.com/polyguard-ai/trust-check-widget/tree/main/integrations/wordpress/postcaptcha).
 These notes show where the widget and the server-side check go if you add
 them to a theme or a small site plugin yourself.
 

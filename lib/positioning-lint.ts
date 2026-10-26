@@ -10,8 +10,8 @@ import { join, relative, resolve } from 'node:path';
 type Rule = { pattern: RegExp; message: string; allow?: string[] };
 
 const ROOT = resolve(__dirname, '..');
-const SCAN_DIRS = ['app', 'components', 'lib', 'examples', 'integrations'];
-const SCAN_FILES = ['README.md', 'CONTRIBUTING.md'];
+const SCAN_DIRS = ['app', 'components', 'lib', 'examples', 'integrations', 'skills'];
+const SCAN_FILES = ['README.md', 'CONTRIBUTING.md', 'public/llms.txt'];
 const SELF = resolve(__filename);
 const EXTENSIONS = new Set(['.ts', '.tsx', '.js', '.md', '.css', '.html', '.py', '.php', '.txt']);
 

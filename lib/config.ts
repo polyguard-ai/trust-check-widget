@@ -10,7 +10,9 @@ export const ONLOAD_CALLBACK = '__pgTrustCheckOnload';
 export const REPO_URL = 'https://github.com/polyguard-ai/trust-check-widget';
 export const CONSOLE_CLAIM_URL = 'https://console.polyguard.ai/settings?claim=';
 export const DOCS_URL = 'https://support.polyguard.ai/sdk/';
-export const LLMS_TXT_URL = 'https://postcaptcha.com/llms.txt';
+export const SITE_URL = 'https://postcaptcha.com';
+export const LLMS_TXT_URL = `${SITE_URL}/llms.txt`;
+export const LLMS_FULL_TXT_URL = `${SITE_URL}/llms-full.txt`;
 
 export const AGENT_PROMPT = `Replace the CAPTCHA on my form with a Polyguard Trust Check. Read ${LLMS_TXT_URL} and follow it for my stack: add the script tag and the pg-trust-check div to the form, keep the submit button disabled until the widget's callback fires, and verify pg-trust-check-response on the server with POST https://api.polyguard.ai/v2/siteverify, requiring success to be true and hostname to equal my site's hostname.`;
 

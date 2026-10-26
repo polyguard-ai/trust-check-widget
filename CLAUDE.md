@@ -42,7 +42,11 @@ Everything is on `app/page.tsx` under anchored sections (`#how`,
 links are anchors. `/demo`, `/claim` and `/migrate/*` redirect there in
 `next.config.mjs`. `public/llms.txt` is the agent-facing copy of the
 integration instructions and is linked from `AGENT_PROMPT` in
-`lib/config.ts`; keep the two in step with `examples/`. The TypeScript
+`lib/config.ts`; keep the two in step with `examples/` and with
+`skills/postcaptcha/SKILL.md`. `/llms-full.txt` is generated at build time by
+`app/llms-full.txt/route.ts` from `public/llms.txt` and the files listed in its
+`EXAMPLES`. `app/robots.ts`, `app/sitemap.ts` and the JSON-LD in
+`app/page.tsx` (built from `FAQ`) are the crawler metadata. The TypeScript
 examples are typechecked and linted with the site.
 
 ## WordPress plugin

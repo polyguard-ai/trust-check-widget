@@ -11,6 +11,16 @@ single page with the widget live, a setup prompt for coding agents,
 tables, the claim instructions, and server-side verification examples you
 can copy.
 
+## For coding agents
+
+- [`postcaptcha.com/llms.txt`](https://postcaptcha.com/llms.txt): when to add
+  a Trust Check, the markup, the siteverify contract and the rules to enforce.
+- [`postcaptcha.com/llms-full.txt`](https://postcaptcha.com/llms-full.txt):
+  the same with every example's source inline, built from `examples/`.
+- [`skills/postcaptcha`](./skills/postcaptcha/SKILL.md): an Agent Skill.
+  Install it with `npx skills add polyguard-ai/trust-check-widget`, or copy
+  the directory into `.claude/skills/` or your agent's skills directory.
+
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fpolyguard-ai%2Ftrust-check-widget&project-name=trust-check-widget)
 
 No environment variables are required to deploy.
@@ -67,6 +77,16 @@ WooCommerce, and Contact Form 7.
 
 Visitors need a phone. They do not need to install an app: on an iPhone the
 check runs in an App Clip, and on Android it runs in the browser.
+
+### Replacing reCAPTCHA, Turnstile or hCaptcha
+
+For reCAPTCHA v2 and Turnstile, change the script URL to
+`https://cdn.polyguard.ai/sdk/latest/trust-check.js` and the server's
+siteverify URL to `https://api.polyguard.ai/v2/siteverify`. The script renders
+existing `.g-recaptcha` and `.cf-turnstile` markup and keeps their field
+names. For hCaptcha, also change the container class to `pg-trust-check` and
+read `pg-trust-check-response` on the server. See
+[the migration tables](https://postcaptcha.com/#migrate).
 
 ---
 
@@ -169,6 +189,9 @@ and the smoke test on every push to `main` and every pull request.
 - `app/`: the one page, and `api/submit/route.ts`, the hero's siteverify handler. No database; nothing is stored. `/demo`, `/claim` and `/migrate/*` redirect to the page's sections.
 - `components/`: the hero widget, the flow diagram, the copy-prompt button, the claim link form, the diff table.
 - `public/llms.txt`: integration instructions for coding agents, linked from the page and from the setup prompt.
+- `app/llms-full.txt/route.ts`: `/llms-full.txt`, built at build time from `public/llms.txt` and `examples/`.
+- `app/robots.ts`, `app/sitemap.ts`, and the JSON-LD in `app/page.tsx`: crawler and search metadata.
+- `skills/postcaptcha/SKILL.md`: an Agent Skill with the same instructions in short form.
 - `examples/`: copyable verification code, linked from the page.
 - `integrations/wordpress/`: the postcaptcha WordPress plugin, with its phpcs and wp-env setup.
 - `lib/`: config (including the agent prompt), siteverify helpers, migration tables, positioning lint.
