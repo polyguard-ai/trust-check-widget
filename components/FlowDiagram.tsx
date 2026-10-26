@@ -1,3 +1,5 @@
+import type { ReactNode } from 'react';
+
 type Step = { title: string; body: string };
 export type Lane = { label: string; steps: Step[] };
 
@@ -43,12 +45,15 @@ function Arrow({ vertical }: { vertical: boolean }) {
   );
 }
 
-/** One lane of the Trust Check flow: four steps, stacked below lg and in a row above it. */
-export function FlowLane({ lane }: { lane: Lane }) {
+/** One lane of the Trust Check flow: a title above an image and four steps; the steps stack below lg. */
+export function FlowLane({ lane, image }: { lane: Lane; image: ReactNode }) {
   return (
-    <figure className="m-0 flex flex-col gap-3">
-      <figcaption className="text-[13px] font-semibold text-muted">{lane.label}</figcaption>
-      <ol className="m-0 grid list-none gap-7 p-0 lg:grid-cols-4 lg:gap-10">
+    <figure className="m-0 grid grid-cols-[auto_minmax(0,1fr)] items-start gap-x-4 gap-y-4 sm:gap-x-8 lg:gap-y-3">
+      <figcaption className="col-span-2 text-lg leading-snug font-semibold text-ink lg:col-span-1 lg:col-start-2 lg:row-start-1 lg:self-end lg:text-[13px] lg:text-muted">
+        {lane.label}
+      </figcaption>
+      <div className="row-start-2 lg:row-span-2 lg:row-start-1 lg:self-center">{image}</div>
+      <ol className="col-start-2 row-start-2 m-0 grid max-w-lg list-none gap-7 p-0 lg:max-w-none lg:grid-cols-4 lg:gap-10">
         {lane.steps.map((s, i) => {
           const dark = i === 2;
           return (

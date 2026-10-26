@@ -125,30 +125,30 @@ export default function Home() {
             How it works
           </h2>
           <div className="flex flex-col gap-10">
-            <div className="flex items-start gap-4 sm:gap-8 lg:items-center">
-              <Image
-                src={photo}
-                alt="A person holding a phone up to a laptop screen that shows a Trust Check code."
-                width={160}
-                className="h-auto w-28 flex-none rounded-lg sm:w-40"
-                sizes="(min-width: 640px) 160px, 112px"
-              />
-              <div className="min-w-0 max-w-lg flex-1 lg:max-w-none">
-                <FlowLane lane={TWO_DEVICES} />
-              </div>
-            </div>
-            <div className="flex items-start gap-4 sm:gap-8 lg:items-center">
-              <Image
-                src={oneDevice}
-                alt="The Polyguard hand-off page on a phone, with a Verify without download button."
-                width={160}
-                className="h-auto w-28 flex-none rounded-lg border border-line sm:w-40"
-                sizes="(min-width: 640px) 160px, 112px"
-              />
-              <div className="min-w-0 max-w-lg flex-1 lg:max-w-none">
-                <FlowLane lane={ONE_DEVICE} />
-              </div>
-            </div>
+            <FlowLane
+              lane={TWO_DEVICES}
+              image={
+                <Image
+                  src={photo}
+                  alt="A person holding a phone up to a laptop screen that shows a Trust Check code."
+                  width={160}
+                  className="h-auto w-28 rounded-lg sm:w-40"
+                  sizes="(min-width: 640px) 160px, 112px"
+                />
+              }
+            />
+            <FlowLane
+              lane={ONE_DEVICE}
+              image={
+                <Image
+                  src={oneDevice}
+                  alt="The Polyguard hand-off page on a phone, with a Verify without download button."
+                  width={160}
+                  className="h-auto w-28 rounded-lg border border-line sm:w-40"
+                  sizes="(min-width: 640px) 160px, 112px"
+                />
+              }
+            />
           </div>
         </div>
       </section>
