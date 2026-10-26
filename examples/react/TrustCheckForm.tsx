@@ -1,23 +1,24 @@
 'use client';
 
-import { useState, type FormEvent } from 'react';
-import { usePolyguardTrustCheck } from './usePolyguardTrustCheck';
+import { useRef, useState, type FormEvent } from 'react';
+import { TrustCheck, type TrustCheckHandle } from './TrustCheck';
 
 export function SignupForm() {
-  const { ref, response, error, reset } = usePolyguardTrustCheck({ action: 'signup' });
+  const trustCheck = useRef<TrustCheckHandle>(null);
+  const [response, setResponse] = useState('');
   const [status, setStatus] = useState<'idle' | 'sending' | 'done' | 'failed'>('idle');
 
   async function onSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setStatus('sending');
     // The widget's hidden pg-trust-check-response input is inside the form.
-    const res = await fetch('/api/signup', {
+    const res = await fetch('/api/trust-check/verify', {
       method: 'POST',
       body: new FormData(event.currentTarget),
     });
     setStatus(res.ok ? 'done' : 'failed');
     // Polyguard accepts a response once; a second submission needs a new Trust Check.
-    reset();
+    trustCheck.current?.reset();
   }
 
   return (
@@ -25,8 +26,7 @@ export function SignupForm() {
       <label>
         Email <input name="email" type="email" required />
       </label>
-      <div className="pg-trust-check" ref={ref} />
-      {error && <p role="alert">Trust Check error: {error}</p>}
+      <TrustCheck ref={trustCheck} action="signup" onChange={setResponse} />
       <button type="submit" disabled={!response || status === 'sending'}>
         Create account
       </button>

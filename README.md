@@ -17,6 +17,12 @@ can copy.
   a Trust Check, the markup, the siteverify contract and the rules to enforce.
 - [`postcaptcha.com/llms-full.txt`](https://postcaptcha.com/llms-full.txt):
   the same with every example's source inline, built from `examples/`.
+- [`postcaptcha.com/r/registry.json`](https://postcaptcha.com/r/registry.json):
+  a shadcn registry built from `examples/`. In a React project,
+  `npx shadcn@latest add https://postcaptcha.com/r/trust-check.json` installs
+  the `TrustCheck` component and the `usePolyguardTrustCheck` hook;
+  `trust-check-verify.json` adds `verifyTrustCheck` and a Next.js route at
+  `app/api/trust-check/verify/route.ts`.
 - [`skills/postcaptcha`](./skills/postcaptcha/SKILL.md): an Agent Skill.
   Install it with `npx skills add polyguard-ai/trust-check-widget`, or copy
   the directory into `.claude/skills/` or your agent's skills directory.
@@ -185,6 +191,7 @@ and the smoke test on every push to `main` and every pull request.
 - `components/`: the hero widget, the flow diagram, the copy-prompt button, the claim link form, the diff table.
 - `public/llms.txt`: integration instructions for coding agents, linked from the page and from the setup prompt.
 - `app/llms-full.txt/route.ts`: `/llms-full.txt`, built at build time from `public/llms.txt` and `examples/`.
+- `app/r/[file]/route.ts` and `lib/registry.ts`: the shadcn registry at `/r/registry.json`, `/r/trust-check.json` and `/r/trust-check-verify.json`, built at build time from `examples/`.
 - `app/robots.ts`, `app/sitemap.ts`, and the JSON-LD in `app/page.tsx`: crawler and search metadata.
 - `skills/postcaptcha/SKILL.md`: an Agent Skill with the same instructions in short form.
 - `examples/`: copyable verification code, linked from the page.
