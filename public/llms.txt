@@ -127,6 +127,29 @@ Polyguard.TrustCheck.ready(fn);
 `expired-callback`, `error-callback`, `action`, `cdata`, `theme`, `size`,
 `locale`, `path`, `scored`).
 
+### React
+
+In a React project, install the `TrustCheck` component and the
+`usePolyguardTrustCheck` hook with the shadcn CLI:
+
+```bash
+npx shadcn@latest add https://postcaptcha.com/r/trust-check.json
+```
+
+The files land in `components/trust-check/`. Render
+`<TrustCheck action="signup" onChange={setResponse} />` inside the form, keep
+the submit button disabled while `response` is `''`, and call `reset()` on
+the component's ref after each submission. For a Next.js App Router server,
+also install `verifyTrustCheck` (`lib/trust-check.ts`) and a route at
+`app/api/trust-check/verify/route.ts`:
+
+```bash
+npx shadcn@latest add https://postcaptcha.com/r/trust-check-verify.json
+```
+
+Then set `SITE_HOSTNAME`. Without the CLI, copy the files from the examples
+below. The registry index is https://postcaptcha.com/r/registry.json.
+
 ## Step 2: the server
 
 ```http
@@ -185,8 +208,10 @@ inline.
 
 - [Plain HTML](https://raw.githubusercontent.com/polyguard-ai/trust-check-widget/main/examples/html/index.html): sign-up form with the callbacks wired to the submit button.
 - [React hook](https://raw.githubusercontent.com/polyguard-ai/trust-check-widget/main/examples/react/usePolyguardTrustCheck.ts): loads the script once in explicit mode and renders into a ref.
-- [React form](https://raw.githubusercontent.com/polyguard-ai/trust-check-widget/main/examples/react/TrustCheckForm.tsx): a sign-up form using the hook.
-- [Next.js App Router route handler](https://raw.githubusercontent.com/polyguard-ai/trust-check-widget/main/examples/nextjs/route.ts): verifies the response in `app/api/.../route.ts`.
+- [React component](https://raw.githubusercontent.com/polyguard-ai/trust-check-widget/main/examples/react/TrustCheck.tsx): `<TrustCheck>` with `onChange` and a `reset()` ref, built on the hook. Install both with `npx shadcn@latest add https://postcaptcha.com/r/trust-check.json`.
+- [React form](https://raw.githubusercontent.com/polyguard-ai/trust-check-widget/main/examples/react/TrustCheckForm.tsx): a sign-up form using the component.
+- [Next.js verifyTrustCheck helper](https://raw.githubusercontent.com/polyguard-ai/trust-check-widget/main/examples/nextjs/trust-check.ts): `verifyTrustCheck(formData, { remoteip, action })` for route handlers and server actions.
+- [Next.js App Router route handler](https://raw.githubusercontent.com/polyguard-ai/trust-check-widget/main/examples/nextjs/route.ts): `app/api/trust-check/verify/route.ts`, using the helper. Install both with `npx shadcn@latest add https://postcaptcha.com/r/trust-check-verify.json`.
 - [Express middleware](https://raw.githubusercontent.com/polyguard-ai/trust-check-widget/main/examples/express/middleware.js): `requireTrustCheck({ expectedHostname })`.
 - [Flask decorator](https://raw.githubusercontent.com/polyguard-ai/trust-check-widget/main/examples/python-flask/verify.py): `@require_trust_check()`, standard library only.
 - [PHP](https://raw.githubusercontent.com/polyguard-ai/trust-check-widget/main/examples/php/verify.php): `polyguard_siteverify()` with curl.

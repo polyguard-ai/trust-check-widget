@@ -12,6 +12,7 @@ import {
   DOCS_URL,
   LLMS_TXT_URL,
   REPO_URL,
+  SHADCN_ADD_COMMAND,
   SITE_URL,
 } from '@/lib/config';
 import { DIFFERENCES, RECAPTCHA, TURNSTILE } from '@/lib/migrations';
@@ -260,6 +261,12 @@ export default function Home() {
                 it to <span className="font-mono">POST /v2/siteverify</span>, require{' '}
                 <span className="font-mono">success</span>, and compare{' '}
                 <span className="font-mono">hostname</span> with your own.
+              </p>
+              <p className="m-0 text-sm text-muted">
+                In a React project, install the component and hook with:
+                <code className="mt-1 block font-mono [overflow-wrap:anywhere] text-ink">
+                  {SHADCN_ADD_COMMAND}
+                </code>
               </p>
             </div>
           </div>

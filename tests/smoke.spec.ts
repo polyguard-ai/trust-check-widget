@@ -1,3 +1,5 @@
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { expect, test, type Page } from '@playwright/test';
 
 const SESSION = 'MockSession1234';
@@ -167,4 +169,43 @@ test('page has JSON-LD for the product and the FAQ', async ({ page }) => {
   await expect(
     page.locator('link[rel="alternate"][href="https://postcaptcha.com/llms.txt"]'),
   ).toHaveCount(1);
+});
+
+test('shadcn registry items match the files in examples/', async ({ request }) => {
+  const index = await request.get('/r/registry.json');
+  expect(index.status()).toBe(200);
+  expect(index.headers()['access-control-allow-origin']).toBe('*');
+  const registry = await index.json();
+  expect(registry.items.map((i: { name: string }) => i.name)).toEqual([
+    'trust-check',
+    'trust-check-verify',
+  ]);
+
+  const example = (file: string) => readFileSync(join(process.cwd(), 'examples', file), 'utf8');
+  type File = { path: string; type: string; target?: string; content: string };
+
+  const res = await request.get('/r/trust-check.json');
+  expect(res.status()).toBe(200);
+  expect(res.headers()['content-type']).toContain('application/json');
+  const item = await res.json();
+  expect(item.$schema).toBe('https://ui.shadcn.com/schema/registry-item.json');
+  expect(item.name).toBe('trust-check');
+  const files: File[] = item.files;
+  expect(files.map((f) => [f.path, f.type])).toEqual([
+    ['registry/components/trust-check/TrustCheck.tsx', 'registry:component'],
+    ['registry/components/trust-check/usePolyguardTrustCheck.ts', 'registry:component'],
+  ]);
+  expect(files[0].content).toBe(example('react/TrustCheck.tsx'));
+  expect(files[1].content).toBe(example('react/usePolyguardTrustCheck.ts'));
+
+  const verify = await (await request.get('/r/trust-check-verify.json')).json();
+  const [lib, route]: File[] = verify.files;
+  expect(lib.path).toBe('registry/lib/trust-check.ts');
+  expect(lib.content).toBe(example('nextjs/trust-check.ts'));
+  expect(route.target).toBe('app/api/trust-check/verify/route.ts');
+  expect(route.content).toBe(
+    example('nextjs/route.ts').replace("from './trust-check'", "from '@/lib/trust-check'"),
+  );
+
+  expect((await request.get('/r/unknown.json')).status()).toBe(404);
 });

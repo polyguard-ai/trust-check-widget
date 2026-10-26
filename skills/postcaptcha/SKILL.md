@@ -43,6 +43,16 @@ form. In React and other frameworks that own the DOM, load
 `Polyguard.TrustCheck.render(element, { callback, action })`; see
 https://raw.githubusercontent.com/polyguard-ai/trust-check-widget/main/examples/react/usePolyguardTrustCheck.ts
 
+In React, install a `TrustCheck` component and the hook into
+`components/trust-check/`:
+
+```bash
+npx shadcn@latest add https://postcaptcha.com/r/trust-check.json
+```
+
+Render `<TrustCheck action="signup" onChange={setResponse} />` inside the
+form and call `reset()` on its ref after each submission.
+
 ## 2. The server
 
 ```http
@@ -57,6 +67,13 @@ Accept the submission only if:
 - `success` is `true`,
 - `hostname` equals the hostname the form is served from, and
 - `action` equals the `data-action` you set.
+
+In a Next.js App Router project, install `verifyTrustCheck` and a route at
+`app/api/trust-check/verify/route.ts`, then set `SITE_HOSTNAME`:
+
+```bash
+npx shadcn@latest add https://postcaptcha.com/r/trust-check-verify.json
+```
 
 Use a 5-second timeout and treat network errors and non-JSON replies as
 failures. `secret` is optional. A response verifies once and expires after

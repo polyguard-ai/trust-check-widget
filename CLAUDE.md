@@ -45,7 +45,9 @@ integration instructions and is linked from `AGENT_PROMPT` in
 `lib/config.ts`; keep the two in step with `examples/` and with
 `skills/postcaptcha/SKILL.md`. `/llms-full.txt` is generated at build time by
 `app/llms-full.txt/route.ts` from `public/llms.txt` and the files listed in its
-`EXAMPLES`. `app/robots.ts`, `app/sitemap.ts` and the JSON-LD in
+`EXAMPLES`. `/r/*.json` is a shadcn registry built the same way by
+`app/r/[file]/route.ts` from the files listed in `ITEMS` in `lib/registry.ts`;
+update `ITEMS` when an example it lists is renamed. `app/robots.ts`, `app/sitemap.ts` and the JSON-LD in
 `app/page.tsx` (built from `FAQ`) are the crawler metadata. The TypeScript
 examples are typechecked and linted with the site.
 

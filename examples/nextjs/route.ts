@@ -1,49 +1,23 @@
-// app/api/signup/route.ts
+// app/api/trust-check/verify/route.ts
 import { NextRequest, NextResponse } from 'next/server';
+import { verifyTrustCheck } from './trust-check';
 
-const SITEVERIFY_URL = 'https://api.polyguard.ai/v2/siteverify';
-// The hostname your form is served from, exactly as visitors load it.
-const EXPECTED_HOSTNAME = process.env.SITE_HOSTNAME ?? 'www.example.com';
-
-type Siteverify = {
-  success: boolean;
-  hostname?: string;
-  action?: string;
-  score?: string;
-  'error-codes'?: string[];
-};
+// The action set on the widget (data-action, or the action prop).
+const EXPECTED_ACTION = 'signup';
 
 export async function POST(request: NextRequest) {
   const form = await request.formData();
-  const token = form.get('pg-trust-check-response');
-  if (typeof token !== 'string' || !token) {
-    return NextResponse.json({ error: 'missing-input-response' }, { status: 400 });
-  }
-
-  const body = new URLSearchParams({ response: token });
-  const ip = request.headers.get('x-forwarded-for')?.split(',')[0].trim();
-  if (ip) body.set('remoteip', ip);
-  // Optional until your hostname is claimed: the App API key from the console.
-  if (process.env.POLYGUARD_SITEVERIFY_SECRET) {
-    body.set('secret', process.env.POLYGUARD_SITEVERIFY_SECRET);
-  }
-
-  const res = await fetch(SITEVERIFY_URL, {
-    method: 'POST',
-    body,
-    cache: 'no-store',
-    signal: AbortSignal.timeout(5000),
+  const result = await verifyTrustCheck(form, {
+    remoteip: request.headers.get('x-forwarded-for')?.split(',')[0].trim(),
+    action: EXPECTED_ACTION,
   });
-  const result = (await res.json()) as Siteverify;
-
-  // Without a secret, the hostname comparison is what ties the result to your site.
-  if (!result.success || result.hostname !== EXPECTED_HOSTNAME || result.action !== 'signup') {
-    return NextResponse.json(
-      { error: 'trust_check_failed', codes: result['error-codes'] ?? [] },
-      { status: 403 },
-    );
+  if (!result.ok) {
+    const status = result.codes.includes('missing-input-response') ? 400 : 403;
+    return NextResponse.json({ error: 'trust_check_failed', codes: result.codes }, { status });
   }
 
-  // The Trust Check passed: create the account with form.get('email').
+  // The Trust Check passed: do the protected work here, such as creating the
+  // account from form.get('email'). Or call verifyTrustCheck from the route or
+  // server action that already handles the form, and delete this route.
   return NextResponse.json({ ok: true });
 }

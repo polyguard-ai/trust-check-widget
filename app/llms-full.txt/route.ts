@@ -7,7 +7,9 @@ export const dynamic = 'force-static';
 const EXAMPLES: { title: string; file: string; lang: string }[] = [
   { title: 'Plain HTML', file: 'examples/html/index.html', lang: 'html' },
   { title: 'React hook', file: 'examples/react/usePolyguardTrustCheck.ts', lang: 'ts' },
+  { title: 'React component', file: 'examples/react/TrustCheck.tsx', lang: 'tsx' },
   { title: 'React form', file: 'examples/react/TrustCheckForm.tsx', lang: 'tsx' },
+  { title: 'Next.js verifyTrustCheck helper', file: 'examples/nextjs/trust-check.ts', lang: 'ts' },
   { title: 'Next.js App Router route handler', file: 'examples/nextjs/route.ts', lang: 'ts' },
   { title: 'Express middleware', file: 'examples/express/middleware.js', lang: 'js' },
   { title: 'Flask decorator', file: 'examples/python-flask/verify.py', lang: 'python' },
