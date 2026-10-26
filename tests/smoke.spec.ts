@@ -134,3 +134,37 @@ test('/api/submit rejects a missing response without calling siteverify', async 
   expect(body.verified).toBe(false);
   expect(body.siteverify['error-codes']).toEqual(['missing-input-response']);
 });
+
+test('agent and crawler files are served', async ({ request }) => {
+  const llms = await request.get('/llms.txt');
+  expect(llms.headers()['content-type']).toContain('text/plain');
+  expect(llms.headers()['access-control-allow-origin']).toBe('*');
+  expect(await llms.text()).toMatch(/^# postcaptcha/);
+
+  const full = await request.get('/llms-full.txt');
+  expect(full.status()).toBe(200);
+  expect(full.headers()['access-control-allow-origin']).toBe('*');
+  const fullText = await full.text();
+  expect(fullText).toContain('## Example source');
+  expect(fullText).toContain('def require_trust_check');
+  expect(fullText.trimEnd()).toMatch(/## Optional\n[\s\S]*Claim instructions[^\n]*$/);
+
+  const robots = await request.get('/robots.txt');
+  const robotsText = await robots.text();
+  expect(robotsText).toContain('User-Agent: GPTBot');
+  expect(robotsText).toContain('Sitemap: https://postcaptcha.com/sitemap.xml');
+
+  const sitemap = await request.get('/sitemap.xml');
+  expect(await sitemap.text()).toContain('https://postcaptcha.com/llms-full.txt');
+});
+
+test('page has JSON-LD for the product and the FAQ', async ({ page }) => {
+  await mockWidget(page);
+  await page.goto('/');
+  const raw = await page.locator('script[type="application/ld+json"]').textContent();
+  const types = JSON.parse(raw ?? '{}')['@graph'].map((n: { '@type': string }) => n['@type']);
+  expect(types).toEqual(['Organization', 'WebSite', 'SoftwareApplication', 'FAQPage']);
+  await expect(
+    page.locator('link[rel="alternate"][href="https://postcaptcha.com/llms.txt"]'),
+  ).toHaveCount(1);
+});

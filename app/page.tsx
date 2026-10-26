@@ -5,7 +5,15 @@ import { FlowLane, ONE_DEVICE, TWO_DEVICES } from '@/components/FlowDiagram';
 import { HeroTrustCheck } from '@/components/HeroTrustCheck';
 import { withCode } from '@/components/InlineCode';
 import { MigrationSteps } from '@/components/MigrationSteps';
-import { AGENT_PROMPT, CONSOLE_CLAIM_URL, DOCS_URL, LLMS_TXT_URL, REPO_URL } from '@/lib/config';
+import {
+  AGENT_PROMPT,
+  CDN_SCRIPT_URL,
+  CONSOLE_CLAIM_URL,
+  DOCS_URL,
+  LLMS_TXT_URL,
+  REPO_URL,
+  SITE_URL,
+} from '@/lib/config';
 import { DIFFERENCES, RECAPTCHA, TURNSTILE } from '@/lib/migrations';
 import oneDevice from '@/public/one-device.webp';
 import photo from '@/public/trust-check-in-use.webp';
@@ -42,6 +50,18 @@ const CLAIM_REASONS = [
 
 const FAQ = [
   {
+    q: 'What can replace reCAPTCHA or Turnstile now that AI agents solve CAPTCHAs?',
+    a: 'A Polyguard Trust Check. It asks the visitor to hold a phone up to the screen instead of solving a puzzle. The script also renders existing reCAPTCHA and Turnstile markup, so the change is the script URL and the siteverify URL on your server.',
+  },
+  {
+    q: 'Which forms should have a Trust Check?',
+    a: 'Any form that creates an account or accepts submissions from the public: sign-up, password reset, contact, comments, waitlists and free trials. Leave it off JSON APIs that other programs call, since the widget runs in a browser.',
+  },
+  {
+    q: 'How do I get my coding agent to add it?',
+    a: 'Copy the setup prompt on this page, or tell the agent to read postcaptcha.com/llms.txt. The GitHub repository also includes an Agent Skill in skills/postcaptcha.',
+  },
+  {
     q: 'What happens at 1,000 checks?',
     a: 'The widget shows "Unavailable this week" on every page in the account until Monday 00:00 UTC. Claim your website and you can raise the limit.',
   },
@@ -75,6 +95,58 @@ const FAQ = [
   },
 ];
 
+// Built from the constants above so the structured data matches the visible copy.
+const STRUCTURED_DATA = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Organization',
+      '@id': 'https://polyguard.ai/#organization',
+      name: 'Polyguard',
+      url: 'https://polyguard.ai',
+    },
+    {
+      '@type': 'WebSite',
+      '@id': `${SITE_URL}/#website`,
+      name: 'postcaptcha',
+      url: SITE_URL,
+      publisher: { '@id': 'https://polyguard.ai/#organization' },
+    },
+    {
+      '@type': 'SoftwareApplication',
+      name: 'Polyguard Trust Check',
+      alternateName: 'postcaptcha',
+      description:
+        'A keyless replacement for reCAPTCHA v2, Cloudflare Turnstile and hCaptcha. The visitor holds a phone up to the screen, and the server verifies the result with one POST to https://api.polyguard.ai/v2/siteverify.',
+      applicationCategory: 'SecurityApplication',
+      operatingSystem: 'Web browser',
+      url: SITE_URL,
+      downloadUrl: CDN_SCRIPT_URL,
+      softwareHelp: LLMS_TXT_URL,
+      codeRepository: REPO_URL,
+      license: 'https://opensource.org/licenses/MIT',
+      publisher: { '@id': 'https://polyguard.ai/#organization' },
+      offers: {
+        '@type': 'Offer',
+        price: '0',
+        priceCurrency: 'USD',
+        description: 'Free for 1,000 Trust Checks per week per hostname. No account required.',
+      },
+    },
+    {
+      '@type': 'FAQPage',
+      mainEntity: FAQ.map((item) => ({
+        '@type': 'Question',
+        name: item.q,
+        acceptedAnswer: { '@type': 'Answer', text: item.a },
+      })),
+    },
+  ],
+};
+
+// JSON.stringify does not escape "<", which would let a string close the script element.
+const STRUCTURED_DATA_JSON = JSON.stringify(STRUCTURED_DATA).replace(/</g, '\\u003c');
+
 const BUTTON_PRIMARY =
   'inline-flex h-[46px] items-center rounded-md bg-primary px-5 font-semibold text-white no-underline hover:bg-primary-strong hover:text-white';
 const BUTTON_SECONDARY =
@@ -83,6 +155,10 @@ const BUTTON_SECONDARY =
 export default function Home() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: STRUCTURED_DATA_JSON }}
+      />
       <section id="top" className="bg-surface px-4 pt-14 pb-14 sm:px-6 md:pt-16">
         <div className="mx-auto flex max-w-[1120px] flex-wrap items-center gap-12">
           <div className="flex min-w-0 flex-[1_1_460px] flex-col gap-[22px]">
