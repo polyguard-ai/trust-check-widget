@@ -29,12 +29,14 @@ https://postcaptcha.com/llms-full.txt).
 <script src="https://cdn.polyguard.ai/sdk/latest/trust-check.js" async defer></script>
 
 <form method="POST" action="/signup">
-  <input name="email" type="email" required>
+  <input name="email" type="email" required />
   <div class="pg-trust-check" data-callback="onVerified" data-action="signup"></div>
   <button id="submit" type="submit" disabled>Create account</button>
 </form>
 <script>
-  function onVerified() { document.getElementById('submit').disabled = false; }
+  function onVerified() {
+    document.getElementById('submit').disabled = false;
+  }
 </script>
 ```
 

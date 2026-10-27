@@ -32,7 +32,7 @@ No environment variables are required to deploy.
 <script src="https://cdn.polyguard.ai/sdk/latest/trust-check.js" async defer></script>
 
 <form method="POST" action="/signup">
-  <input name="email" type="email" required>
+  <input name="email" type="email" required />
   <div class="pg-trust-check" data-callback="onVerified" data-action="signup"></div>
   <button type="submit">Create account</button>
 </form>
@@ -120,12 +120,12 @@ app, limited to 100 checks a day per IP address.
 
 ## Environment variables
 
-| Variable | Where | Default | Purpose |
-|---|---|---|---|
-| `NEXT_PUBLIC_POLYGUARD_API_SERVER` | Browser + server | `api.polyguard.ai` | API host, without a scheme. The widget and `/api/submit` both use `https://<host>`. |
-| `NEXT_PUBLIC_TRUST_CHECK_SCRIPT_URL` | Browser | `https://cdn.polyguard.ai/sdk/latest/trust-check.js` | Where the widget script loads from. `/vendor/trust-check.js` for a local build. |
-| `POLYGUARD_SITEVERIFY_SECRET` | **Server only** | empty | After the hostname is claimed, the App API key, sent as `secret` to `/v2/siteverify`. |
-| `POLYGUARD_EXPECTED_HOSTNAMES` | Server | empty | Comma-separated hostnames `/api/submit` accepts in the result. Empty means the request's own hostname. |
+| Variable                             | Where            | Default                                              | Purpose                                                                                                |
+| ------------------------------------ | ---------------- | ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| `NEXT_PUBLIC_POLYGUARD_API_SERVER`   | Browser + server | `api.polyguard.ai`                                   | API host, without a scheme. The widget and `/api/submit` both use `https://<host>`.                    |
+| `NEXT_PUBLIC_TRUST_CHECK_SCRIPT_URL` | Browser          | `https://cdn.polyguard.ai/sdk/latest/trust-check.js` | Where the widget script loads from. `/vendor/trust-check.js` for a local build.                        |
+| `POLYGUARD_SITEVERIFY_SECRET`        | **Server only**  | empty                                                | After the hostname is claimed, the App API key, sent as `secret` to `/v2/siteverify`.                  |
+| `POLYGUARD_EXPECTED_HOSTNAMES`       | Server           | empty                                                | Comma-separated hostnames `/api/submit` accepts in the result. Empty means the request's own hostname. |
 
 `NEXT_PUBLIC_*` values are inlined at build time; redeploy after changing them.
 
