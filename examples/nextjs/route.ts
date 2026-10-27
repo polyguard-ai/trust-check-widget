@@ -44,6 +44,6 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  // The Trust Check passed: create the account with form.get('email').
+  // The check passed: create the account with form.get('email').
   return NextResponse.json({ ok: true });
 }

@@ -63,7 +63,7 @@ export type UsePolyguardTrustCheckOptions = Omit<
 > & { scriptUrl?: string };
 
 /**
- * Renders a Trust Check into `ref` and tracks its response.
+ * Renders the postcaptcha widget into `ref` and tracks its response.
  * `response` is '' until the visitor completes the check, and again after it
  * expires (300 seconds) or `reset()` is called.
  */

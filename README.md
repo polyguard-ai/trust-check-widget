@@ -1,9 +1,8 @@
 # postcaptcha
 
-Postcaptcha replaces reCAPTCHA or Cloudflare Turnstile with a Polyguard Trust
-Check. The visitor confirms with their phone, Polyguard checks with PG-Presence
-that a real device is in front of the screen, and your server verifies the
-result with one POST. No site key, secret or account is needed to start.
+postcaptcha replaces reCAPTCHA or Cloudflare Turnstile. The visitor confirms
+with their phone, Polyguard checks with PG-Presence that a real device is in
+front of the screen, and your server verifies the result with one POST. No site key, secret or account is needed to start.
 
 This repo is the source of [postcaptcha.com](https://postcaptcha.com): a
 single page with the widget live, a setup prompt for coding agents,
@@ -14,7 +13,7 @@ can copy.
 ## For coding agents
 
 - [`postcaptcha.com/llms.txt`](https://postcaptcha.com/llms.txt): when to add
-  a Trust Check, the markup, the siteverify contract and the rules to enforce.
+  postcaptcha, the markup, the siteverify contract and the rules to enforce.
 - [`postcaptcha.com/llms-full.txt`](https://postcaptcha.com/llms-full.txt):
   the same with every example's source inline, built from `examples/`.
 - [`skills/postcaptcha`](./skills/postcaptcha/SKILL.md): an Agent Skill.
@@ -115,7 +114,7 @@ NEXT_PUBLIC_TRUST_CHECK_SCRIPT_URL=/vendor/trust-check.js
 ```
 
 and restart `pnpm dev`. On `localhost` the backend uses its local development
-app, limited to 100 Trust Checks a day per IP address.
+app, limited to 100 checks a day per IP address.
 
 ---
 
@@ -146,7 +145,7 @@ app, limited to 100 Trust Checks a day per IP address.
 ```
 
 The site uses keyless mode, so Polyguard creates an account for
-`postcaptcha.com` when the first Trust Check runs in production. To move that
+`postcaptcha.com` when the first check runs in production. To move that
 account into the Polyguard account:
 
 1. Sign in to the console and open **Settings → Websites**

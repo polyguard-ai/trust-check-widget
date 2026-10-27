@@ -1,4 +1,4 @@
-"""Flask decorator that requires a completed Polyguard Trust Check.
+"""Flask decorator that requires a completed postcaptcha check.
 
 Standard library only for the HTTP call. Behind a proxy, wrap the app with
 werkzeug.middleware.proxy_fix.ProxyFix so request.remote_addr is the visitor's.
