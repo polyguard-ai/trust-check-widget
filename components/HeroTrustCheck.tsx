@@ -90,7 +90,7 @@ export function HeroTrustCheck() {
       )}
       {widgetError && (
         <p role="alert" className="m-0 text-[13px] text-del-ink">
-          Trust Check error: <span className="font-mono">{widgetError}</span>
+          Error: <span className="font-mono">{widgetError}</span>
         </p>
       )}
       {phase === 'verifying' && (
@@ -104,7 +104,7 @@ export function HeroTrustCheck() {
           data-testid="submit-placeholder"
           className="flex min-h-[120px] items-center justify-center rounded-lg border border-dashed border-line-strong bg-surface p-4 text-center font-mono text-xs text-muted"
         >
-          The JSON results from this Trust Check will appear here.
+          The siteverify JSON your server receives will appear here.
         </div>
       )}
 

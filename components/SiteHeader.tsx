@@ -6,9 +6,9 @@ import { DOCS_URL, REPO_URL } from '@/lib/config';
 
 const NAV = [
   { href: '#how', label: 'How it works' },
-  { href: '#examples', label: 'Examples' },
-  { href: '#migrate', label: 'Migrate' },
-  { href: '#claim', label: 'Claim your site' },
+  { href: '#migrate', label: 'Switch' },
+  { href: '#examples', label: 'Set up' },
+  { href: '#claim', label: 'Free account' },
   { href: DOCS_URL, label: 'Docs' },
   { href: REPO_URL, label: 'GitHub' },
 ];

@@ -21,11 +21,11 @@ const robotoMono = localFont({
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: 'postcaptcha: replace your CAPTCHA with a Polyguard Trust Check',
+    default: 'postcaptcha: a CAPTCHA replacement that asks for a real phone',
     template: '%s | postcaptcha',
   },
   description:
-    'The only way to be sure an agent did not fill in your form. A keyless, drop-in replacement for reCAPTCHA and Turnstile, verified on your server with one request.',
+    'The only way to know your user is a human. A free replacement for reCAPTCHA and Turnstile with no site key. Your server verifies each result with one request.',
   keywords: [
     'CAPTCHA alternative',
     'reCAPTCHA alternative',
@@ -33,25 +33,25 @@ export const metadata: Metadata = {
     'hCaptcha alternative',
     'block AI agents',
     'sign-up form bot protection',
-    'Polyguard Trust Check',
+    'postcaptcha',
   ],
   alternates: {
     canonical: '/',
     types: { 'text/plain': [{ url: '/llms.txt', title: 'Instructions for coding agents' }] },
   },
   openGraph: {
-    title: "The only way to be sure an agent didn't fill in your form.",
+    title: 'The only way to know your user is a human.',
     description:
-      'A keyless Polyguard Trust Check replaces reCAPTCHA or Turnstile. Free for 1,000 Trust Checks a week, no account required.',
+      'postcaptcha replaces reCAPTCHA or Turnstile. Free for 1,000 checks a week, no account needed.',
     url: SITE_URL,
     siteName: 'postcaptcha',
     type: 'website',
   },
   twitter: {
     card: 'summary',
-    title: "The only way to be sure an agent didn't fill in your form.",
+    title: 'The only way to know your user is a human.',
     description:
-      'A keyless Polyguard Trust Check replaces reCAPTCHA or Turnstile. Free for 1,000 Trust Checks a week, no account required.',
+      'postcaptcha replaces reCAPTCHA or Turnstile. Free for 1,000 checks a week, no account needed.',
   },
 };
 

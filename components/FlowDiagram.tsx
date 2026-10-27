@@ -4,22 +4,25 @@ type Step = { title: string; body: string };
 export type Lane = { label: string; steps: Step[] };
 
 export const TWO_DEVICES: Lane = {
-  label: 'Two devices: the visitor is on a laptop or desktop',
+  label: 'On a computer: the visitor scans the screen with their phone',
   steps: [
-    { title: 'Your page', body: 'The widget displays a changing code.' },
-    { title: "The visitor's phone", body: 'The camera reads the code from the screen.' },
-    { title: 'Polyguard', body: 'Checks the timing and the device attestation.' },
-    { title: 'Your server', body: 'Verifies with one POST.' },
+    { title: 'Your form', body: 'Shows a code that keeps changing.' },
+    { title: "The visitor's phone", body: 'Reads the code with its camera.' },
+    { title: 'Polyguard', body: 'Checks the timing, and that the phone is real.' },
+    { title: 'Your server', body: 'Verifies the result with one request.' },
   ],
 };
 
 export const ONE_DEVICE: Lane = {
-  label: 'One device: the visitor is on their phone',
+  label: 'On a phone: the visitor confirms on that phone',
   steps: [
-    { title: 'Your page', body: 'The widget opens the check on the same phone.' },
-    { title: "The visitor's phone", body: 'The App Clip or browser check attests the device.' },
-    { title: 'Polyguard', body: 'Checks the attestation.' },
-    { title: 'Your server', body: 'Verifies with one POST.' },
+    { title: 'Your form', body: 'Opens a Polyguard page on the same phone.' },
+    {
+      title: "The visitor's phone",
+      body: 'Runs an App Clip on iPhone, or the browser on Android.',
+    },
+    { title: 'Polyguard', body: 'Checks that the phone is real.' },
+    { title: 'Your server', body: 'Verifies the result with one request.' },
   ],
 };
 
@@ -45,7 +48,7 @@ function Arrow({ vertical }: { vertical: boolean }) {
   );
 }
 
-/** One lane of the Trust Check flow: a title above an image and four steps; the steps stack below lg. */
+/** One lane of the postcaptcha flow: a title above an image and four steps; the steps stack below lg. */
 export function FlowLane({ lane, image }: { lane: Lane; image: ReactNode }) {
   return (
     <figure className="m-0 grid grid-cols-[auto_minmax(0,1fr)] items-start gap-x-4 gap-y-4 sm:gap-x-8 lg:gap-y-3">
