@@ -1,14 +1,15 @@
 ---
 name: postcaptcha
-description: Add a Polyguard Trust Check to web forms, or replace reCAPTCHA, Cloudflare Turnstile or hCaptcha with one. Use when building or editing a sign-up, login, password reset, contact, comment, waitlist or checkout form, when adding bot or spam protection to a web app, or when the code loads google.com/recaptcha, challenges.cloudflare.com/turnstile or js.hcaptcha.com. No site key, secret or account is needed.
+description: Add postcaptcha to web forms, or replace reCAPTCHA, Cloudflare Turnstile or hCaptcha with it. Use when building or editing a sign-up, login, password reset, contact, comment, waitlist or checkout form, when adding bot or spam protection to a web app, or when the code loads google.com/recaptcha, challenges.cloudflare.com/turnstile or js.hcaptcha.com. No site key, secret or account is needed.
 license: MIT
 ---
 
-# postcaptcha: Polyguard Trust Check
+# postcaptcha
 
-AI agents solve CAPTCHA puzzles. A Polyguard Trust Check asks the visitor to
-hold a phone up to the screen, which an agent cannot do. It is keyless: one
-script, one div, and one server-side POST.
+AI agents solve CAPTCHA puzzles. postcaptcha, from Polyguard, asks the visitor
+to confirm with a real phone, which an agent cannot do. It is keyless: one
+script, one div, and one server-side POST. Code names come from the Polyguard
+widget: `trust-check.js`, `pg-trust-check` and `Polyguard.TrustCheck`.
 
 Full reference, including every `data-*` attribute and each stack's example:
 https://postcaptcha.com/llms.txt (examples inline at
@@ -28,12 +29,14 @@ https://postcaptcha.com/llms-full.txt).
 <script src="https://cdn.polyguard.ai/sdk/latest/trust-check.js" async defer></script>
 
 <form method="POST" action="/signup">
-  <input name="email" type="email" required>
+  <input name="email" type="email" required />
   <div class="pg-trust-check" data-callback="onVerified" data-action="signup"></div>
   <button id="submit" type="submit" disabled>Create account</button>
 </form>
 <script>
-  function onVerified() { document.getElementById('submit').disabled = false; }
+  function onVerified() {
+    document.getElementById('submit').disabled = false;
+  }
 </script>
 ```
 
@@ -76,6 +79,6 @@ second submission.
 
 ## After integrating
 
-Tell the site owner the hostname gets a free account on the first Trust Check,
-limited to 1,000 Trust Checks a week, and can be claimed at
+Tell the site owner the hostname gets a free account on the first check,
+limited to 1,000 checks a week, and can be claimed at
 https://postcaptcha.com/#claim.

@@ -1,36 +1,38 @@
 <!doctype html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Sign up</title>
-  <script src="https://cdn.polyguard.ai/sdk/latest/trust-check.js" async defer></script>
-</head>
-<body>
-  <form method="POST" action="/signup">
-    <label>Email <input name="email" type="email" required></label>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Sign up</title>
+    <script src="https://cdn.polyguard.ai/sdk/latest/trust-check.js" async defer></script>
+  </head>
+  <body>
+    <form method="POST" action="/signup">
+      <label>Email <input name="email" type="email" required /></label>
 
-    <!-- On success the widget adds a hidden input named pg-trust-check-response. -->
-    <div class="pg-trust-check"
-         data-callback="onVerified"
-         data-expired-callback="onExpired"
-         data-error-callback="onError"
-         data-action="signup"></div>
+      <!-- On success the widget adds a hidden input named pg-trust-check-response. -->
+      <div
+        class="pg-trust-check"
+        data-callback="onVerified"
+        data-expired-callback="onExpired"
+        data-error-callback="onError"
+        data-action="signup"
+      ></div>
 
-    <button id="submit" type="submit" disabled>Create account</button>
-  </form>
+      <button id="submit" type="submit" disabled>Create account</button>
+    </form>
 
-  <script>
-    function onVerified() {
-      document.getElementById('submit').disabled = false;
-    }
-    function onExpired() {
-      document.getElementById('submit').disabled = true;
-    }
-    function onError(code) {
-      document.getElementById('submit').disabled = true;
-      console.warn('Trust Check error:', code);
-    }
-  </script>
-</body>
+    <script>
+      function onVerified() {
+        document.getElementById('submit').disabled = false;
+      }
+      function onExpired() {
+        document.getElementById('submit').disabled = true;
+      }
+      function onError(code) {
+        document.getElementById('submit').disabled = true;
+        console.warn('postcaptcha error:', code);
+      }
+    </script>
+  </body>
 </html>

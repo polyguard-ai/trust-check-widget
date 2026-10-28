@@ -33,9 +33,12 @@ function Step({ step, muted }: { step: MigrationStep; muted?: boolean }) {
   );
 }
 
-export function MigrationSteps({ migration: m }: { migration: Migration }) {
+export function MigrationSteps({ id, migration: m }: { id: string; migration: Migration }) {
   return (
-    <div className="flex min-w-0 flex-col gap-5 rounded-xl border border-line p-5 sm:p-6">
+    <div
+      id={id}
+      className="scroll-mt-4 flex min-w-0 flex-col gap-5 rounded-xl border border-line p-5 sm:p-6"
+    >
       <h3 className="m-0 text-lg font-semibold">From {m.fromLabel}</h3>
       <ol className="m-0 flex list-decimal flex-col gap-4 pl-5 text-[15px] leading-relaxed text-ink">
         {m.required.map((s) => (

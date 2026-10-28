@@ -1,4 +1,4 @@
-// Express middleware that requires a completed Polyguard Trust Check.
+// Express middleware that requires a completed postcaptcha check.
 // Node 18+ (global fetch). Mount express.urlencoded() before it.
 const SITEVERIFY_URL = 'https://api.polyguard.ai/v2/siteverify';
 

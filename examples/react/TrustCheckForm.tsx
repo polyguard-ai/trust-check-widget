@@ -16,7 +16,7 @@ export function SignupForm() {
       body: new FormData(event.currentTarget),
     });
     setStatus(res.ok ? 'done' : 'failed');
-    // Polyguard accepts a response once; a second submission needs a new Trust Check.
+    // Polyguard accepts a response once; a second submission needs a new check.
     reset();
   }
 
@@ -26,12 +26,12 @@ export function SignupForm() {
         Email <input name="email" type="email" required />
       </label>
       <div className="pg-trust-check" ref={ref} />
-      {error && <p role="alert">Trust Check error: {error}</p>}
+      {error && <p role="alert">postcaptcha error: {error}</p>}
       <button type="submit" disabled={!response || status === 'sending'}>
         Create account
       </button>
       {status === 'done' && <p>Account created.</p>}
-      {status === 'failed' && <p role="alert">The server did not accept the Trust Check.</p>}
+      {status === 'failed' && <p role="alert">The server did not accept the check.</p>}
     </form>
   );
 }

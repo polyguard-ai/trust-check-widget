@@ -1,9 +1,8 @@
 # postcaptcha
 
-Postcaptcha replaces reCAPTCHA or Cloudflare Turnstile with a Polyguard Trust
-Check. The visitor confirms with their phone, Polyguard checks with PG-Presence
-that a real device is in front of the screen, and your server verifies the
-result with one POST. No site key, secret or account is needed to start.
+postcaptcha replaces reCAPTCHA or Cloudflare Turnstile. The visitor confirms
+with their phone, Polyguard checks with PG-Presence that a real device is in
+front of the screen, and your server verifies the result with one POST. No site key, secret or account is needed to start.
 
 This repo is the source of [postcaptcha.com](https://postcaptcha.com): a
 single page with the widget live, a setup prompt for coding agents,
@@ -14,7 +13,7 @@ can copy.
 ## For coding agents
 
 - [`postcaptcha.com/llms.txt`](https://postcaptcha.com/llms.txt): when to add
-  a Trust Check, the markup, the siteverify contract and the rules to enforce.
+  postcaptcha, the markup, the siteverify contract and the rules to enforce.
 - [`postcaptcha.com/llms-full.txt`](https://postcaptcha.com/llms-full.txt):
   the same with every example's source inline, built from `examples/`.
 - [`skills/postcaptcha`](./skills/postcaptcha/SKILL.md): an Agent Skill.
@@ -33,7 +32,7 @@ No environment variables are required to deploy.
 <script src="https://cdn.polyguard.ai/sdk/latest/trust-check.js" async defer></script>
 
 <form method="POST" action="/signup">
-  <input name="email" type="email" required>
+  <input name="email" type="email" required />
   <div class="pg-trust-check" data-callback="onVerified" data-action="signup"></div>
   <button type="submit">Create account</button>
 </form>
@@ -115,18 +114,18 @@ NEXT_PUBLIC_TRUST_CHECK_SCRIPT_URL=/vendor/trust-check.js
 ```
 
 and restart `pnpm dev`. On `localhost` the backend uses its local development
-app, limited to 100 Trust Checks a day per IP address.
+app, limited to 100 checks a day per IP address.
 
 ---
 
 ## Environment variables
 
-| Variable | Where | Default | Purpose |
-|---|---|---|---|
-| `NEXT_PUBLIC_POLYGUARD_API_SERVER` | Browser + server | `api.polyguard.ai` | API host, without a scheme. The widget and `/api/submit` both use `https://<host>`. |
-| `NEXT_PUBLIC_TRUST_CHECK_SCRIPT_URL` | Browser | `https://cdn.polyguard.ai/sdk/latest/trust-check.js` | Where the widget script loads from. `/vendor/trust-check.js` for a local build. |
-| `POLYGUARD_SITEVERIFY_SECRET` | **Server only** | empty | After the hostname is claimed, the App API key, sent as `secret` to `/v2/siteverify`. |
-| `POLYGUARD_EXPECTED_HOSTNAMES` | Server | empty | Comma-separated hostnames `/api/submit` accepts in the result. Empty means the request's own hostname. |
+| Variable                             | Where            | Default                                              | Purpose                                                                                                |
+| ------------------------------------ | ---------------- | ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------ |
+| `NEXT_PUBLIC_POLYGUARD_API_SERVER`   | Browser + server | `api.polyguard.ai`                                   | API host, without a scheme. The widget and `/api/submit` both use `https://<host>`.                    |
+| `NEXT_PUBLIC_TRUST_CHECK_SCRIPT_URL` | Browser          | `https://cdn.polyguard.ai/sdk/latest/trust-check.js` | Where the widget script loads from. `/vendor/trust-check.js` for a local build.                        |
+| `POLYGUARD_SITEVERIFY_SECRET`        | **Server only**  | empty                                                | After the hostname is claimed, the App API key, sent as `secret` to `/v2/siteverify`.                  |
+| `POLYGUARD_EXPECTED_HOSTNAMES`       | Server           | empty                                                | Comma-separated hostnames `/api/submit` accepts in the result. Empty means the request's own hostname. |
 
 `NEXT_PUBLIC_*` values are inlined at build time; redeploy after changing them.
 
@@ -146,7 +145,7 @@ app, limited to 100 Trust Checks a day per IP address.
 ```
 
 The site uses keyless mode, so Polyguard creates an account for
-`postcaptcha.com` when the first Trust Check runs in production. To move that
+`postcaptcha.com` when the first check runs in production. To move that
 account into the Polyguard account:
 
 1. Sign in to the console and open **Settings → Websites**

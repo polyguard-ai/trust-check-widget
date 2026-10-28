@@ -1,5 +1,5 @@
 <?php
-// Verify a Polyguard Trust Check before handling a form POST. Requires ext-curl.
+// Verify a postcaptcha check before handling a form POST. Requires ext-curl.
 
 const POLYGUARD_SITEVERIFY_URL = 'https://api.polyguard.ai/v2/siteverify';
 
@@ -45,9 +45,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (($result['success'] ?? false) !== true || ($result['hostname'] ?? '') !== $expectedHostname) {
         http_response_code(403);
-        exit('Trust Check failed: ' . implode(', ', $result['error-codes'] ?? []));
+        exit('postcaptcha check failed: ' . implode(', ', $result['error-codes'] ?? []));
     }
 
-    // The Trust Check passed: handle $_POST['email'] here.
+    // The check passed: handle $_POST['email'] here.
     echo 'Account created';
 }

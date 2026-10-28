@@ -32,7 +32,7 @@ add_action('login_form', function () {
 ```
 
 The widget adds a hidden `pg-trust-check-response` input to the enclosing form
-when the visitor completes the Trust Check.
+when the visitor completes the check.
 
 ## Verify on the server
 

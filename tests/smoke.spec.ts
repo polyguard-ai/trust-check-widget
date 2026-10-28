@@ -67,7 +67,7 @@ test('hero shows the siteverify result after the Trust Check callback', async ({
 
   await page.goto('/');
   await expect(page.getByRole('heading', { level: 1 })).toHaveText(
-    "The only way to be sure an agent didn't fill in your form.",
+    'The only way to know your user is a human.',
   );
 
   const hero = page.locator('#demo');
@@ -98,6 +98,10 @@ test('one page: nav anchors, sections and the agent instructions', async ({ page
   await expect(
     page.getByRole('button', { name: 'Copy setup prompt for your agent' }),
   ).toBeVisible();
+  for (const id of ['recaptcha', 'turnstile']) {
+    await expect(page.locator(`#top a[href="#${id}"]`)).toHaveCount(1);
+    await expect(page.locator(`#migrate #${id}`)).toHaveCount(1);
+  }
   await expect(
     page.getByRole('link', { name: 'https://postcaptcha.com/llms.txt' }),
   ).toHaveAttribute('href', '/llms.txt');

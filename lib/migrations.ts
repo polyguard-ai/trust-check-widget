@@ -9,11 +9,11 @@ export type Migration = {
 
 /** Ordered by weight: what changes behavior first, then setup, then details. */
 export const DIFFERENCES = [
-  'There is no invisible or score-only mode. Every Trust Check is interactive: the visitor holds a phone up to the screen.',
-  'No site key or account is needed. Polyguard creates a free account when the first Trust Check runs from your website.',
-  '`secret` is an optional parameter, since API keys cannot be created until you have set up a free account. You can make it required once that is done.',
-  'Results are valid for 5 minutes, instead of 2 minutes for reCAPTCHA.',
-  '`remoteip` is reported as `remoteip_matched`; decide for yourself whether to fail on a mismatch.',
+  'There is no invisible or score-only mode. Every visitor confirms with a phone.',
+  'You do not need a site key or an account. Polyguard creates a free account the first time postcaptcha runs on your website.',
+  '`secret` is optional, because you cannot create API keys until you claim your website. You can require it after that.',
+  'A result is valid for 5 minutes. reCAPTCHA allows 2.',
+  'Polyguard reports `remoteip` as `remoteip_matched`. You decide whether a mismatch fails the form.',
 ];
 
 export const RECAPTCHA: Migration = {
